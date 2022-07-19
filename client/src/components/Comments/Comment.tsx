@@ -3,7 +3,6 @@ import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { convertDatestringToDate } from "../../helpers/convertDate";
 import IComment from "../../models/IComment";
-import { postsAPI } from "../../services/postsService";
 
 interface CommentProps {
   comment: IComment;
