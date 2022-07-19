@@ -1,0 +1,19 @@
+{
+  "name": "geek-net",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatAndrey/geek-net.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatAndrey/geek-net/issues"
+  },
+  "homepage": "https://github.com/MatAndrey/geek-net#readme"
+}
