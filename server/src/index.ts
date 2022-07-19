@@ -1,9 +1,9 @@
-import express, { Response, Request, Express } from "express";
+const express = require("express");
 import config from "config";
 import path from "path";
 import jsonServer from "json-server";
 
-const app: Express = express();
+const app = express();
 
 app.use(express.json());
 
@@ -14,9 +14,9 @@ app.use("/api/auth/", require("./routes/auth.routes"));
 app.use("/api", jsonServer.router(path.join(__dirname, "json-server", "db.json")));
 
 if (process.env.NODE_MOD === "production") {
-  app.use("/", express.static(path.join("../../client", "build")));
-  app.get("*", (req: Request, res: Response) => {
-    res.sendFile(path.resolve("../../client", "build", "index.html"));
+  app.use("/", express.static(path.join(__dirname, "..", "..", "client", "build")));
+  app.get("*", (req: any, res: any) => {
+    res.sendFile(path.join(__dirname, "..", "..", "client", "build", "index.html"));
   });
 }
 

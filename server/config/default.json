@@ -1,0 +1,4 @@
+{
+  "port": 5000,
+  "DATABASE_URL": "postgres://vzvmlnnrtxexrc:176105695b4f845c463e83286d3b54ce9420124e8881780c52d02572c8f942dd@ec2-63-34-180-86.eu-west-1.compute.amazonaws.com:5432/d9lc3io2h150dq"
+}

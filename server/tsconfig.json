@@ -1,5 +1,5 @@
 {
-  "include": ["./src"],
+  "include": ["./src", "./src/json-server/db.json"],
   "exclude": ["./node_modules"],
   "compilerOptions": {
     "target": "es2018",
@@ -9,6 +9,7 @@
     "allowJs": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "strict": true
+    "strict": true,
+    "resolveJsonModule": true
   }
 }
