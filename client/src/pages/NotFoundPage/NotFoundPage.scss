@@ -1,0 +1,33 @@
+.not_found_page {
+  .text_wrapper {
+    margin: 0 auto;
+    text-align: center;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 250px;
+    position: relative;
+    text-shadow: 3px 3px 6px var(--font-primary-color);
+    animation: 1s infinite ease-in-out NotFound alternate;
+  }
+
+  p,
+  a {
+    font-size: 30px;
+  }
+
+  a {
+    color: var(--link-color);
+  }
+
+  @keyframes NotFound {
+    0% {
+      top: 0;
+    }
+    50% {
+    }
+    100% {
+      top: 15px;
+    }
+  }
+}

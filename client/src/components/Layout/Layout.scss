@@ -1,0 +1,17 @@
+header {
+  position: sticky;
+  top: 0;
+  background: var(--header-color);
+}
+
+main.layout {
+  min-height: 100vh;
+
+  background: var(--bg-color);
+  .page_wrapper {
+    width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+}
