@@ -1,11 +1,14 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  init:
+  client:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/checkout@v3
       - name: Staring Node.js ${{matrix.node-version}}
