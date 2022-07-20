@@ -13,13 +13,10 @@ app.use("/api/auth/", require("./routes/auth.routes"));
 
 app.use("/api", jsonServer.router(path.join(__dirname, "json-server", "db.json")));
 
-if (process.env.NODE_ENV === "production") {
-  // if (true) {
-  app.use(express.static(path.join(__dirname, "..", "client", "build")));
-  app.get("*", (req: any, res: any) => {
-    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  });
-}
+app.use(express.static(path.join(__dirname, "..", "client", "build")));
+app.get("*", (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+});
 
 const PORT = process.env.PORT || config.get("port") || 5000;
 
