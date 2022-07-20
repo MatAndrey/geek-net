@@ -6,7 +6,7 @@
   "scripts": {
     "build:server": "cd ./server && npm install && npm run build",
     "build:client": "cd ./client && npm install && npm run build",
-    "start": "node server/build/index.js",
+    "start": "cd ./server && npm run start",
     "build": "npm run build:server && npm run build:client"
   },
   "repository": {
