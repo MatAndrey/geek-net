@@ -25,7 +25,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "concurrently \"npm run build:server\" \"npm run build:client\"",
     "build:server": "tsc",
-    "build:client": "cd client && npm install & npm run build",
+    "build:client": "npm run build --prefix ./client",
     "start": "node build/index.js"
   },
   "keywords": [],
