@@ -23,10 +23,10 @@
     "server": "nodemon src/index.ts",
     "client": "npm run start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "tsc",
-    "build:client": "",
+    "build:server": "tsc",
+    "build:client": "cd ./client && npm install && npm run build",
     "start": "node build/index.js",
-    "heroku-postbuild": "cd ./client && npm install && npm run build"
+    "heroku-postbuild": "npm run build:client && npm run build:server"
   },
   "keywords": [],
   "author": "",
