@@ -13,7 +13,7 @@ app.use("/api/auth/", require("./routes/auth.routes"));
 
 app.use("/api", jsonServer.router(path.join(__dirname, "json-server", "db.json")));
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_MOD === "production") {
   // if (true) {
   app.use(express.static(path.join(__dirname, "..", "client", "build")));
   app.get("*", (req: any, res: any) => {
