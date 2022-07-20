@@ -24,8 +24,9 @@
     "client": "npm run start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "tsc",
+    "build:client": "",
     "start": "node build/index.js",
-    "heroku-postbuild": "cd client && npm install & npm run build"
+    "heroku-postbuild": "npm install --prefix client & npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
