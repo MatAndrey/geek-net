@@ -4,7 +4,7 @@ import IComment from "../models/IComment";
 
 export const postsAPI = createApi({
   reducerPath: "postsAPI",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
   tagTypes: ["Post", "Comment"],
   endpoints: (builder) => ({
     getAllPosts: builder.query<IPost[], string>({
