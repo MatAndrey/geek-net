@@ -48,5 +48,9 @@
   },
   "devDependencies": {
     "@types/react-router-hash-link": "^2.4.5"
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
   }
 }
