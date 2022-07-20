@@ -21,11 +21,11 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon src/index.ts",
-    "client": "npm run start --prefix ../client",
+    "client": "npm run start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "concurrently \"npm run build:server\" \"npm run build:client\"",
     "build:server": "tsc",
-    "build:client": "npm run build --prefix ../client",
+    "build:client": "npm run build --prefix ./client",
     "start": "node build/index.js"
   },
   "keywords": [],
