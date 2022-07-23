@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import React, { ChangeEventHandler, FC } from "react";
 
 interface PropType {
   children: React.ReactNode;
