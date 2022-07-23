@@ -1,6 +1,8 @@
+export type roles = "USER" | "ADMIN" | "GUEST";
+
 export default interface User {
-  id: number;
-  registerat: string;
+  token: string;
   name: string;
-  avatar: string;
+  id: string;
+  role: roles;
 }

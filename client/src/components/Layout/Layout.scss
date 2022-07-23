@@ -2,6 +2,36 @@ header {
   position: sticky;
   top: 0;
   background: var(--header-color);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  .logo {
+    display: inline-block;
+    a {
+      text-decoration: none;
+      h1 {
+        font-size: 30px;
+        padding: 5px;
+        color: #fff;
+      }
+    }
+  }
+  nav {
+    height: 100%;
+    ul {
+      li {
+        a {
+          font-size: 18px;
+          display: inline-block;
+          color: white;
+          text-align: center;
+          padding: 11px;
+          text-decoration: none;
+        }
+      }
+    }
+  }
 }
 
 main.layout {
@@ -9,9 +39,27 @@ main.layout {
 
   background: var(--bg-color);
   .page_wrapper {
+    padding-top: 4px;
     width: 700px;
     margin: 0 auto;
     overflow: hidden;
     word-wrap: break-word;
+    min-height: inherit;
+  }
+}
+
+footer {
+  background: var(--footer-color);
+  padding: 6px;
+  text-align: center;
+  color: #eee;
+  * {
+    padding: 0 10px;
+  }
+  h6 {
+    display: inline-block;
+  }
+  a {
+    color: #eee;
   }
 }

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { CommentsContainer } from "../../components/Comments/CommentsContainer";
 import { Loader } from "../../components/Loader/Loader";
 import { Post } from "../../components/Post/Post";
-import { postsAPI } from "../../services/postsService";
+import { postsAPI } from "../../services/posts.service";
 import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 import "./PostPage.scss";
 

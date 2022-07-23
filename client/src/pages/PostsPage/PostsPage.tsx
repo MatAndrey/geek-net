@@ -1,6 +1,6 @@
 import { Loader } from "../../components/Loader/Loader";
 import { Post } from "../../components/Post/Post";
-import { postsAPI } from "../../services/postsService";
+import { postsAPI } from "../../services/posts.service";
 
 export const PostsPage = () => {
   const { data: posts } = postsAPI.useGetAllPostsQuery("");

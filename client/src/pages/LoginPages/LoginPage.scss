@@ -1,0 +1,40 @@
+.login_page {
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .form_wrapper {
+    background: var(--post-color);
+    border-radius: 10px;
+    h2 {
+      font-size: 30px;
+      color: var(--font-primary-color);
+      text-align: center;
+      padding: 20px 0;
+    }
+    form {
+      margin: 0 auto;
+      width: 350px;
+      padding: 0 20px 20px 20px;
+
+      button.submit {
+        width: 100%;
+        background-color: var(--light-blue);
+        border: 1px solid var(--font-thirdly-color);
+        padding: 4px;
+        color: #fff;
+        border-radius: 4px;
+        margin-top: 24px;
+        font-size: 20px;
+        cursor: pointer;
+        &:hover {
+          background-color: var(--blue);
+        }
+        &:disabled {
+          background-color: var(--light-gray);
+          cursor: default;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+.row {
+  .field {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--font-thirdly-color);
+    input[type="text"],
+    input[type="password"] {
+      width: 90%;
+      border: none;
+      outline: none;
+    }
+    .icon {
+      width: 5%;
+    }
+    button {
+      padding: 0;
+      border: none;
+      background: inherit;
+      cursor: pointer;
+    }
+  }
+  p {
+    color: var(--warning-color);
+    font-size: 15px;
+    padding: 4px 0;
+    min-height: 19px;
+  }
+  .column {
+    width: 50%;
+    display: inline-block;
+    &.right {
+      text-align: right;
+    }
+    &.left {
+      text-align: left;
+    }
+    a {
+      color: var(--link-color);
+      &:hover {
+        color: var(--blue);
+      }
+    }
+  }
+  .checkbox_container {
+    display: block;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-sizing: border-box;
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      &:checked ~ .checkmark {
+        border: 1px solid var(--font-thirdly-color);
+        background: var(--link-color);
+        &::after {
+          display: block;
+        }
+      }
+    }
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 16px;
+      width: 16px;
+      border: 1px solid var(--font-thirdly-color);
+      box-sizing: border-box;
+      &:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 5px;
+        top: 2px;
+        width: 3px;
+        height: 6px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
+    &:hover input ~ .checkmark {
+      background: var(--bg-color);
+    }
+    &:hover input:checked ~ .checkmark {
+      background: var(--link-color);
+    }
+  }
+}

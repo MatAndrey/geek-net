@@ -1,4 +1,6 @@
 import { FC, ReactElement } from "react";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
 import "./Layout.scss";
 
 interface LayoutProps {
@@ -8,11 +10,11 @@ interface LayoutProps {
 export const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <header>HEADER</header>
+      <Header />
       <main className='layout'>
         <div className='page_wrapper'>{children}</div>
       </main>
-      <footer>FOOTER</footer>
+      <Footer />
     </>
   );
 };

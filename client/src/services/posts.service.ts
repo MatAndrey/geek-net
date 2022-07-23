@@ -1,11 +1,8 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import IPost from "../models/IPost";
 import IComment from "../models/IComment";
+import { api } from "./api";
 
-export const postsAPI = createApi({
-  reducerPath: "postsAPI",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["Post", "Comment"],
+export const postsAPI = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IPost[], string>({
       query: () => ({

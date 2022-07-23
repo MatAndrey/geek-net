@@ -9,7 +9,7 @@ const router = Router();
 
 // /api/auth/register body{name, password}
 router.post(
-  "/register",
+  "/signup",
   [
     check("name", "Имя не должно быть короче 3 символов").isLength({ min: 3 }),
     check("password", "Пароль должен быть длиннее 5 символов").isLength({ min: 6 }),
@@ -33,7 +33,7 @@ router.post(
       const addQuery = `INSERT INTO users(name, avatar, registratedat, password, role) VALUES ('${name}', Null, now(), '${hashedPassword}', 'USER')`; // TODO AVATAR
       await client.query(addQuery);
 
-      return res.status(200).json({ message: "Регистрация прошла успешно" });
+      login(req, res);
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: "Ошибка при регистрации" });
@@ -41,8 +41,10 @@ router.post(
   }
 );
 
-// /api/auth/login body{name, password}
-router.post("/login", async (req: any, res: any) => {
+// /api/auth/login body{name, password, remember}
+router.post("/login", login);
+
+async function login(req: any, res: any) {
   try {
     const query = `SELECT password, id, role, name FROM users WHERE name = '${req.body.name}'`;
     const response = await client.query(query);
@@ -54,7 +56,12 @@ router.post("/login", async (req: any, res: any) => {
     const { password: hashedPassword, id, role, name } = response.rows[0];
 
     const isAuth = await bcrypt.compare(req.body.password, hashedPassword);
-    const token = jwt.sign({ id }, config.get("jwtSecret"), {});
+    let token;
+    if (req.remember === true) {
+      token = jwt.sign({ id }, config.get("jwtSecret"));
+    } else {
+      token = jwt.sign({ id }, config.get("jwtSecret"), { expiresIn: "2h" });
+    }
 
     if (isAuth) {
       res.json({ token, id, role, name });
@@ -65,6 +72,6 @@ router.post("/login", async (req: any, res: any) => {
     console.log(e);
     res.status(500).json({ message: "Ошибка при входе" });
   }
-});
+}
 
 module.exports = router;
