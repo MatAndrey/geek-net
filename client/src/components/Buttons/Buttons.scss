@@ -1,0 +1,18 @@
+.primary_button {
+  width: 100%;
+  background-color: var(--light-blue);
+  border: 1px solid var(--font-thirdly-color);
+  padding: 4px;
+  color: #fff;
+  border-radius: 4px;
+  margin-top: 24px;
+  font-size: 20px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--blue);
+  }
+  &:disabled {
+    background-color: var(--light-gray);
+    cursor: default;
+  }
+}

@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { Checkbox } from "../../components/Fields/Checkbox";
 import { DoublePass } from "../../components/Fields/DoublePass";
 import { Name } from "../../components/Fields/Name";
@@ -7,7 +8,7 @@ import { Password } from "../../components/Fields/Password";
 import { validate } from "../../helpers/validation";
 import useAuth from "../../hooks/auth.hook";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hook";
-import { useSignUpMutation } from "../../services/user.servive";
+import { useSignUpMutation } from "../../store/services/user.servive";
 import { authSlice } from "../../store/reducers/auth.slice";
 import "./LoginPage.scss";
 
@@ -63,7 +64,7 @@ export const SignUpPage: FC = () => {
           <DoublePass />
           <div className='row'>
             <div className='column left'>
-              <Checkbox value={true} onChange={() => dispatch(setRemember(!authForm.remember))}>
+              <Checkbox value={authForm.remember} onChange={() => dispatch(setRemember(!authForm.remember))}>
                 Запомнить меня
               </Checkbox>
             </div>
@@ -72,9 +73,9 @@ export const SignUpPage: FC = () => {
             </div>
           </div>
           <div className='row'>
-            <button className='submit' tabIndex={4} disabled={!isCorrect} onClick={handleSignUp}>
+            <PrimaryButton tabIndex={4} disabled={!isCorrect} onClick={handleSignUp}>
               Зарегистрироваться
-            </button>
+            </PrimaryButton>
             <p>{error}</p>
           </div>
         </form>

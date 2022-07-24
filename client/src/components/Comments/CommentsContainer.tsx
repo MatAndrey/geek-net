@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { postsAPI } from "../../services/posts.service";
+import { postsAPI } from "../../store/services/posts.service";
 import { Loader } from "../Loader/Loader";
 import { Comment } from "./Comment";
 import "./Comments.scss";

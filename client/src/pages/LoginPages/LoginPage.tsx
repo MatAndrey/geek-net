@@ -1,11 +1,12 @@
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { Checkbox } from "../../components/Fields/Checkbox";
 import { Name } from "../../components/Fields/Name";
 import { Password } from "../../components/Fields/Password";
 import useAuth from "../../hooks/auth.hook";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hook";
-import { useLoginMutation } from "../../services/user.servive";
+import { useLoginMutation } from "../../store/services/user.servive";
 import { authSlice } from "../../store/reducers/auth.slice";
 import "./LoginPage.scss";
 
@@ -47,7 +48,7 @@ export const LoginPage: FC = () => {
           <Password validation={false} />
           <div className='row'>
             <div className='column left'>
-              <Checkbox value={true} onChange={() => dispatch(setRemember(!authForm.remember))}>
+              <Checkbox value={authForm.remember} onChange={() => dispatch(setRemember(!authForm.remember))}>
                 Запомнить меня
               </Checkbox>
             </div>
@@ -56,9 +57,9 @@ export const LoginPage: FC = () => {
             </div>
           </div>
           <div className='row'>
-            <button className='submit' tabIndex={3} onClick={handleLogin}>
+            <PrimaryButton tabIndex={3} onClick={handleLogin}>
               Войти
-            </button>
+            </PrimaryButton>
             <p>{error}</p>
           </div>
         </form>

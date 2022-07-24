@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import User from "../models/IUser";
 import { userSlice } from "../store/reducers/user.slice";
 import { useAppDispatch, useAppSelector } from "./redux.hook";
@@ -23,15 +23,16 @@ export default function useAuth() {
     localStorage.removeItem(storageName);
   }, [dispatch, setUser]);
 
-  useEffect(() => {
+  if (!token) {
     const string = localStorage.getItem(storageName);
+    console.log("here");
     if (string !== null) {
       const user = JSON.parse(string);
       if (user && user.token && user.id) {
         login(user, true);
       }
     }
-  });
+  }
 
   return { token, id, role, name, login, logout };
 }

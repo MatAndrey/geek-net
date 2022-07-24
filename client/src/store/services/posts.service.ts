@@ -1,5 +1,5 @@
-import IPost from "../models/IPost";
-import IComment from "../models/IComment";
+import IPost from "../../models/IPost";
+import IComment from "../../models/IComment";
 import { api } from "./api";
 
 export const postsAPI = api.injectEndpoints({

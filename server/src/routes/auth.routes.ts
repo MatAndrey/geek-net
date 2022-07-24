@@ -1,9 +1,10 @@
-import { Router } from "express";
+import { Router, Response } from "express";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
 import client from "../database/connect";
+import { Req } from "../types/express.types";
 
 const router = Router();
 
@@ -11,10 +12,10 @@ const router = Router();
 router.post(
   "/signup",
   [
-    check("name", "Имя не должно быть короче 3 символов").isLength({ min: 3 }),
+    check("name", "Имя не должно быть короче 2 символов").isLength({ min: 2 }),
     check("password", "Пароль должен быть длиннее 5 символов").isLength({ min: 6 }),
   ],
-  async (req: any, res: any) => {
+  async (req: Req, res: any) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -44,7 +45,7 @@ router.post(
 // /api/auth/login body{name, password, remember}
 router.post("/login", login);
 
-async function login(req: any, res: any) {
+async function login(req: Req, res: any) {
   try {
     const query = `SELECT password, id, role, name FROM users WHERE name = '${req.body.name}'`;
     const response = await client.query(query);
@@ -57,7 +58,7 @@ async function login(req: any, res: any) {
 
     const isAuth = await bcrypt.compare(req.body.password, hashedPassword);
     let token;
-    if (req.remember === true) {
+    if (req.body.remember === true) {
       token = jwt.sign({ id }, config.get("jwtSecret"));
     } else {
       token = jwt.sign({ id }, config.get("jwtSecret"), { expiresIn: "2h" });

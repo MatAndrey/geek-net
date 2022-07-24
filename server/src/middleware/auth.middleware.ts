@@ -9,12 +9,12 @@ export default async (req: any, res: any, next: any) => {
   }
 
   try {
-    let token = req.headers.authorization.split(" ")[1];
+    let token = req.headers.authentication.split(" ")[1];
     token = token === "null" ? null : token;
 
     if (!token) {
       req.user = {
-        role: "UNREG",
+        role: "GUEST",
       };
       return next();
     }
@@ -26,7 +26,7 @@ export default async (req: any, res: any, next: any) => {
       const query = `
       SELECT role
       FROM users
-      WHERE id ='${decoded.userId}'
+      WHERE id ='${decoded.id}'
       `;
       const role = (await client.query(query)).rows[0].role;
       req.user.role = role;

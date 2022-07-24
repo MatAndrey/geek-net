@@ -1,0 +1,22 @@
+.create_post_page {
+  .post_wrapper {
+    background: var(--post-color);
+    padding: 6px;
+    h2 {
+      padding: 4px 0;
+      font-size: 18px;
+      color: var(--font-secondary-color);
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 2px solid var(--font-secondary-color);
+      overflow: scroll;
+    }
+    .ck-content {
+      border: 1px solid var(--font-secondary-color);
+      padding: 4px;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { CreatePostPage } from "./pages/CreatePostPage/CreatePostPage";
 import { LoginPage } from "./pages/LoginPages/LoginPage";
 import { SignUpPage } from "./pages/LoginPages/SignUpPage";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
@@ -16,6 +17,7 @@ export const AppRoutes: FC<PrpoType> = ({ isAuth }) => {
       <Route path='/' element={<PostsPage />} />
       <Route path='/posts' element={<PostsPage />} />
       <Route path='/posts/:postId' element={<PostPage />} />
+      <Route path='/create-post' element={isAuth ? <CreatePostPage /> : <Navigate to='/login' />} />
       <Route path='/login' element={isAuth ? <Navigate to='/' /> : <LoginPage />} />
       <Route path='/signup' element={isAuth ? <Navigate to='/' /> : <SignUpPage />} />
       <Route path='*' element={<NotFoundPage />} />

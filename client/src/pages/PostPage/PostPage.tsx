@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { CommentsContainer } from "../../components/Comments/CommentsContainer";
 import { Loader } from "../../components/Loader/Loader";
 import { Post } from "../../components/Post/Post";
-import { postsAPI } from "../../services/posts.service";
+import { postsAPI } from "../../store/services/posts.service";
 import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 import "./PostPage.scss";
 
@@ -18,7 +18,7 @@ export const PostPage: FC = () => {
       <NotFoundPage />
     ) : (
       <div className='post_page'>
-        <Post post={post} isLink={false} />
+        <Post post={post} />
         <h2 id='comments'>Комментарии</h2>
         <CommentsContainer postId={+postId} />
       </div>

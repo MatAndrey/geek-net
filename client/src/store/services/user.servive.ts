@@ -1,4 +1,4 @@
-import User from "../models/IUser";
+import User from "../../models/IUser";
 import { api } from "./api";
 
 interface LoginData {
