@@ -25,7 +25,6 @@ export default function useAuth() {
 
   if (!token) {
     const string = localStorage.getItem(storageName);
-    console.log("here");
     if (string !== null) {
       const user = JSON.parse(string);
       if (user && user.token && user.id) {

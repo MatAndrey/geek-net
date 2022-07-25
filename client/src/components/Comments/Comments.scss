@@ -3,10 +3,23 @@
   border-radius: 12px;
   padding: 8px;
   background-color: var(--post-color);
-  margin-bottom: 8px;
+  margin: 8px 0;
 
   h3 {
     font-size: 20px;
+  }
+
+  h4 {
+    height: 18px;
+    margin-bottom: 8px;
+  }
+
+  .button_wrapper {
+    width: 120px;
+    button {
+      font-size: 18px;
+      margin: 4px 0;
+    }
   }
 
   .comment {
@@ -49,6 +62,7 @@
         height: 100%;
         border: 1px solid var(--font-thirdly-color);
         left: 7px;
+        cursor: pointer;
       }
     }
 
@@ -63,23 +77,23 @@
     .comment_footer {
       margin-left: 16px;
       color: var(--font-secondary-color);
-      display: flex;
-      align-items: center;
       font-weight: 500;
       font-size: 15px;
       padding: 4px 0;
 
-      .icon {
-        display: flex;
-        align-items: center;
-      }
-
-      button {
+      & > button,
+      .likes button {
         border: none;
         background-color: inherit;
         padding: 0;
         color: var(--font-secondary-color);
         cursor: pointer;
+      }
+
+      a {
+        text-decoration: none;
+        color: var(--font-secondary-color);
+        font-weight: normal;
       }
 
       .likes {
@@ -88,11 +102,31 @@
         .likes_count {
           font-size: 16px;
         }
+        .icon {
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      .answer {
+        button {
+          margin: 4px 4px 0 0;
+        }
       }
     }
 
     .child_comment {
       margin-left: 16px;
+    }
+  }
+
+  .no_thread {
+    button {
+      border: none;
+      background: inherit;
+      cursor: pointer;
+      vertical-align: middle;
+      display: flex;
     }
   }
 }

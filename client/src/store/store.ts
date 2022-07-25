@@ -1,11 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { postsAPI } from "./services/posts.service";
+import { postsApi } from "./services/posts.service";
 import authReducer from "./reducers/auth.slice";
 import userReducer from "./reducers/user.slice";
 import createPostReducer from "./reducers/createPost.slice";
 
 const rootReducer = combineReducers({
-  [postsAPI.reducerPath]: postsAPI.reducer,
+  [postsApi.reducerPath]: postsApi.reducer,
   userReducer,
   authReducer,
   createPostReducer,
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 export function setupStore() {
   return configureStore({
     reducer: rootReducer,
-    middleware: (defaultMiddleware) => defaultMiddleware().concat(postsAPI.middleware),
+    middleware: (defaultMiddleware) => defaultMiddleware().concat(postsApi.middleware),
   });
 }
 

@@ -131,6 +131,10 @@ body,
   font-size: 16px;
 }
 
+a {
+  color: var(--link-color);
+}
+
 :root {
   --font-primary-color: #000000;
   --font-secondary-color: #333;

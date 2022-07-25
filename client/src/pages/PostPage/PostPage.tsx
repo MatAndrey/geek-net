@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { CommentsContainer } from "../../components/Comments/CommentsContainer";
 import { Loader } from "../../components/Loader/Loader";
 import { Post } from "../../components/Post/Post";
-import { postsAPI } from "../../store/services/posts.service";
+import { postsApi } from "../../store/services/posts.service";
 import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 import "./PostPage.scss";
 
@@ -11,7 +11,7 @@ export const PostPage: FC = () => {
   const { postId } = useParams();
 
   if (postId) {
-    var { data: post, isFetching } = postsAPI.useGetPostByIdQuery(+postId);
+    var { data: post, isFetching } = postsApi.useGetPostByIdQuery(+postId);
     return isFetching ? (
       <Loader />
     ) : post === undefined ? (

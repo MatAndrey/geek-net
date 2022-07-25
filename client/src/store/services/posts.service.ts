@@ -2,7 +2,14 @@ import IPost from "../../models/IPost";
 import IComment from "../../models/IComment";
 import { api } from "./api";
 
-export const postsAPI = api.injectEndpoints({
+interface CommentData {
+  body: string;
+  authorid: number;
+  pageid: number;
+  answeron: number | null;
+}
+
+export const postsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IPost[], string>({
       query: () => ({
@@ -18,21 +25,17 @@ export const postsAPI = api.injectEndpoints({
     }),
     getCommentsByPostId: builder.query<IComment[], number>({
       query: (postId) => ({
-        url: "./comments",
-        params: {
-          postid: postId,
-        },
+        url: "/comments/" + postId,
       }),
       providesTags: ["Comment"],
     }),
-    getAnswersByCommentId: builder.query<IComment[], number>({
-      query: (commentId) => ({
-        url: "./comments",
-        params: {
-          answeron: commentId,
-        },
+    postComment: builder.mutation<void, CommentData>({
+      query: (commentData) => ({
+        url: "/comments/create",
+        method: "POST",
+        body: commentData,
       }),
-      providesTags: ["Comment"],
+      invalidatesTags: ["Comment"],
     }),
   }),
 });

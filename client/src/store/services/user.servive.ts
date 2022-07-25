@@ -7,7 +7,7 @@ interface LoginData {
   remember: boolean;
 }
 
-export const userAPI = api.injectEndpoints({
+export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation<User, LoginData>({
       query: (loginData: LoginData) => ({
@@ -26,4 +26,4 @@ export const userAPI = api.injectEndpoints({
   }),
 });
 
-export const { useSignUpMutation, useLoginMutation } = userAPI;
+export const { useSignUpMutation, useLoginMutation } = userApi;

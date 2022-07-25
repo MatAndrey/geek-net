@@ -15,9 +15,9 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && title) {
-      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now(), ${id}, $SecretTag$${title}$SecretTag$, $SecretTag$${body}$SecretTag$)`;
-      await client.query(query);
-      res.status(200).json({ message: "Пост успешно опубликован" });
+      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now(), ${id}, $SecretTag$${title}$SecretTag$, $SecretTag$${body}$SecretTag$) RETURNING id`;
+      const response = await client.query(query);
+      res.status(200).json({ message: "Пост успешно опубликован", id: response.rows[0].id });
     } else {
       res.status(500).json({ message: "Ошибка при создании поста" });
     }

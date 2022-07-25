@@ -16,3 +16,39 @@
     cursor: default;
   }
 }
+
+.secondary_button {
+  width: 120px;
+  background-color: var(--light-blue);
+  border: 1px solid var(--font-thirdly-color);
+  padding: 2px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--blue);
+  }
+  &:disabled {
+    background-color: var(--light-gray);
+    cursor: default;
+  }
+}
+
+.thirdly_button {
+  width: 120px;
+  background-color: var(--light-gray);
+  border: 1px solid var(--font-thirdly-color);
+  padding: 2px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--blue);
+  }
+  &:disabled {
+    background-color: var(--light-gray);
+    cursor: default;
+  }
+}
