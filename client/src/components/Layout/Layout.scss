@@ -25,6 +25,7 @@ header {
       margin: 0;
       padding: 0;
       li {
+        display: flex;
         a {
           font-size: 18px;
           display: inline-block;
@@ -32,6 +33,14 @@ header {
           text-align: center;
           padding: 11px;
           text-decoration: none;
+          display: flex;
+          justify-content: center;
+          img {
+            height: 18px;
+            width: 18px;
+            border-radius: 10px;
+            margin-left: 4px;
+          }
         }
       }
     }
@@ -49,6 +58,10 @@ main.layout {
     overflow: hidden;
     word-wrap: break-word;
     min-height: inherit;
+
+    @media screen and (max-width: 700px) {
+      width: 100%;
+    }
   }
 }
 

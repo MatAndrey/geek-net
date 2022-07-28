@@ -77,9 +77,26 @@ router.get("/:pageId", async (req: Req, res: any) => {
     const { pageId } = req.params;
 
     if (pageId) {
-      const query = `SELECT * FROM comments WHERE pageid=${pageId}`;
-      const comments = (await client.query(query)).rows;
-      const tree = listToTree(comments);
+      const query = `
+        select *,
+          (select avatar
+          from users
+          where users.id = comments.authorid),
+          (select name
+          from users
+          where users.id = comments.authorid),
+          (select count(*) as likes
+          from comment_likes
+          where comment_likes.authorid = comments.authorid and type = 'LIKE' and comments.id = comment_likes.commentid),
+          (select count(*) as dislikes
+          from comment_likes
+          where comment_likes.authorid = comments.authorid and type = 'DISLIKE' and comments.id = comment_likes.commentid)
+        from comments
+        where comments.pageid = ${pageId}
+      `;
+      const comments = await client.query(query);
+      const resp = comments.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
+      const tree = listToTree(resp);
 
       res.json(tree);
     } else {

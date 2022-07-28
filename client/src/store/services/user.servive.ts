@@ -5,6 +5,7 @@ interface LoginData {
   name: string;
   password: string;
   remember: boolean;
+  avatar?: string;
 }
 
 export const userApi = api.injectEndpoints({

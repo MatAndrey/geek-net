@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "./redux.hook";
 const storageName = "user";
 
 export default function useAuth() {
-  const { token, id, role, name } = useAppSelector((state) => state.userReducer);
+  const { token, id, role, name, avatar } = useAppSelector((state) => state.userReducer);
   const { setUser } = userSlice.actions;
   const dispatch = useAppDispatch();
 
@@ -19,7 +19,7 @@ export default function useAuth() {
   );
 
   const logout = useCallback(() => {
-    dispatch(setUser({ id: "", token: "", name: "", role: "GUEST" }));
+    dispatch(setUser({ id: "", token: "", name: "", role: "GUEST", avatar: "" }));
     localStorage.removeItem(storageName);
   }, [dispatch, setUser]);
 
@@ -33,5 +33,5 @@ export default function useAuth() {
     }
   }
 
-  return { token, id, role, name, login, logout };
+  return { token, id, role, name, login, logout, avatar };
 }

@@ -6,6 +6,7 @@ import "./Post.scss";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import parse from "html-react-parser";
+import { ratingApi } from "../../store/services/rating.service";
 
 interface PostProps {
   post: IPost;
@@ -14,13 +15,23 @@ interface PostProps {
 
 export const Post: FC<PostProps> = ({ post, className = "" }) => {
   const reactBody = parse(post.body);
+  const [dislikeMutation] = ratingApi.usePostDislikeMutation();
+  const [likeMutation] = ratingApi.usePostLikeMutation();
+
+  const handleLike = () => {
+    likeMutation(post.id);
+  };
+
+  const handleDislike = () => {
+    dislikeMutation(post.id);
+  };
 
   return (
     <article className={"post_component " + className}>
       <div className='post_header'>
         <Link to={`/user/${post.authorid}`} className='user'>
           <img src={post.avatar} alt='' className='avatar' />
-          <span className='nickname'>{post.author}</span>
+          <span className='nickname'>{post.name}</span>
           <span className='date'>{convertDatestringToDate(post.createdat)}</span>
         </Link>
       </div>
@@ -34,19 +45,17 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
       </div>
       <div className='post_footer'>
         <div className='likes'>
-          <button className='rating_button icon'>
+          <button className='rating_button icon' onClick={handleLike}>
             <FiArrowUp size='24px' color='rgba(0, 100, 0, 0.7)' />
-            {/* TODO рейтинг */}
           </button>
           <div className='likes_count icon'>{post.likes}</div>
-          <button className='rating_button icon'>
+          <button className='rating_button icon' onClick={handleDislike}>
             <FiArrowDown size='24px' color='rgba(100, 0, 0, 0.7)' />
-            {/* TODO рейтинг */}
           </button>
         </div>
         <HashLink to={`/posts/${post.id}#comments`} className={"comments icon"}>
           <FiMessageSquare size='22px' color='rgba(0, 0, 0, 0.7)' />
-          {post.comments} Комментариев{/* TODO склонение */}
+          {post.comments}
         </HashLink>
 
         <button className='save_button icon'>

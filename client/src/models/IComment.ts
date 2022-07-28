@@ -3,7 +3,7 @@ export default interface Comment {
   createdat: string;
   authorid: number;
   body: string;
-  author: string;
+  name: string;
   avatar: string;
   likes: number;
   comments: Comment[];

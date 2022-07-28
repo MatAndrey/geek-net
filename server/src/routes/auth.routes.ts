@@ -22,7 +22,7 @@ router.post(
         return res.status(500).json({ message: "Некорректные данные для регистрации", errors: errors.array() });
       }
 
-      const { name, password } = req.body;
+      const { name, password, avatar } = req.body;
 
       const hashedPassword = await bcrypt.hash(password, 8);
 
@@ -31,7 +31,7 @@ router.post(
       if (candidate.rows.length) {
         return res.status(501).json({ message: "Логин занят" });
       }
-      const addQuery = `INSERT INTO users(name, avatar, registratedat, password, role) VALUES ('${name}', Null, now(), '${hashedPassword}', 'USER')`; // TODO AVATAR
+      const addQuery = `INSERT INTO users(name, avatar, registratedat, password, role) VALUES ('${name}', '${avatar}', now(), '${hashedPassword}', 'USER')`;
       await client.query(addQuery);
 
       login(req, res);
@@ -47,14 +47,14 @@ router.post("/login", login);
 
 async function login(req: Req, res: any) {
   try {
-    const query = `SELECT password, id, role, name FROM users WHERE name = '${req.body.name}'`;
+    const query = `SELECT password, id, role, name, avatar FROM users WHERE name = '${req.body.name}'`;
     const response = await client.query(query);
 
     if (!response.rows.length) {
       return res.status(401).json({ message: "Пользватель не существует" });
     }
 
-    const { password: hashedPassword, id, role, name } = response.rows[0];
+    const { password: hashedPassword, id, role, name, avatar } = response.rows[0];
 
     const isAuth = await bcrypt.compare(req.body.password, hashedPassword);
     let token;
@@ -65,7 +65,7 @@ async function login(req: Req, res: any) {
     }
 
     if (isAuth) {
-      res.json({ token, id, role, name });
+      res.json({ token, id, role, name, avatar });
     } else {
       res.status(401).json({ message: "Неверный пароль" });
     }

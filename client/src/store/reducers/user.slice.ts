@@ -6,6 +6,7 @@ interface UserState {
   name: string;
   role: roles;
   id: string;
+  avatar: string;
 }
 
 const initialState: UserState = {
@@ -13,6 +14,7 @@ const initialState: UserState = {
   name: "",
   id: "",
   role: "GUEST",
+  avatar: "",
 };
 
 export const userSlice = createSlice({
@@ -24,6 +26,7 @@ export const userSlice = createSlice({
       state.token = payload.token;
       state.name = payload.name;
       state.role = payload.role;
+      state.avatar = payload.avatar;
     },
   },
 });

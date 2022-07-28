@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux.hook";
 import { useSignUpMutation } from "../../store/services/user.servive";
 import { authSlice } from "../../store/reducers/auth.slice";
 import "./LoginPage.scss";
+import { createAvatar } from "../../helpers/createAvatar";
 
 export const SignUpPage: FC = () => {
   const [isCorrect, setIsCorrect] = useState(true);
@@ -27,7 +28,7 @@ export const SignUpPage: FC = () => {
       if (isCorrect && authForm.password !== "" && authForm.name !== "" && authForm.password === authForm.doubPass) {
         dispatch(resetForm());
         try {
-          const res = await signUp({ name: authForm.name, password: authForm.password, remember: authForm.remember });
+          const res = await signUp({ name: authForm.name, password: authForm.password, remember: authForm.remember, avatar: createAvatar() });
           if (res && res["data"]) {
             login(res["data"], authForm.remember);
           }

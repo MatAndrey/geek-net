@@ -5,7 +5,7 @@ export default interface Post {
   body: string;
   title: string;
   avatar: string;
-  author: string;
+  name: string;
   likes: number;
   comments: number;
 }

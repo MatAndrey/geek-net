@@ -1,5 +1,5 @@
 .post_component {
-  border: 1px solid var(--font-thirdly-color);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 8px 8px 0 8px;
   margin-bottom: 4px;
@@ -10,7 +10,7 @@
       text-decoration: none;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid var(--font-thirdly-color);
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 4px;
 
       img.avatar {
@@ -49,10 +49,9 @@
   }
 
   .post_footer {
-    border-top: 1px solid var(--font-thirdly-color);
+    border-top: 1px solid var(--border-color);
     color: var(--font-secondary-color);
     display: flex;
-    align-items: center;
     font-weight: 500;
     font-size: 15px;
     padding: 4px 0;

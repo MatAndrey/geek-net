@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, memo, useState } from "react";
 import { postsApi } from "../../store/services/posts.service";
 import { Loader } from "../Loader/Loader";
 import { Comment } from "./Comment";
@@ -13,7 +13,7 @@ interface CommentsProps {
   postId: number;
 }
 
-export const CommentsContainer: FC<CommentsProps> = ({ postId }) => {
+export const CommentsContainer: FC<CommentsProps> = memo(({ postId }) => {
   const { data: comments, isFetching } = postsApi.useGetCommentsByPostIdQuery(+postId);
   const [postCommentMutation] = postsApi.usePostCommentMutation();
   const { id: userId, token } = useAuth();
@@ -63,4 +63,4 @@ export const CommentsContainer: FC<CommentsProps> = ({ postId }) => {
       )}
     </div>
   );
-};
+});
