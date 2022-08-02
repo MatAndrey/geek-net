@@ -8,6 +8,12 @@ interface LoginData {
   avatar?: string;
 }
 
+interface UserInfo {
+  name: string;
+  avatar: string;
+  registratedat: string;
+}
+
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation<User, LoginData>({
@@ -22,6 +28,11 @@ export const userApi = api.injectEndpoints({
         url: "/auth/login",
         method: "POST",
         body: loginData,
+      }),
+    }),
+    getUserById: builder.query<UserInfo, number>({
+      query: (userId) => ({
+        url: "/users/" + userId,
       }),
     }),
   }),

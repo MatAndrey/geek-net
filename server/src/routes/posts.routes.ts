@@ -139,4 +139,42 @@ router.get("/", async (req: Req, res: any) => {
   }
 });
 
+// /api/posts/user/:id
+router.get("/user/:id", async (req: Req, res: any) => {
+  try {
+    const { id } = req.params;
+
+    if (id) {
+      const query = `
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid and users.id = ${id}),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where post_likes.authorid = posts.authorid and type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where post_likes.authorid = posts.authorid and type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where authorid = ${id}
+    `;
+      const posts = await client.query(query);
+      const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
+      res.json(resp);
+    } else {
+      res.status(500).json({ message: "Ошибка при получении постов" });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Ошибка при получении постов" });
+  }
+});
+
 module.exports = router;

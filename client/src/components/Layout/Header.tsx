@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../../hooks/auth.hook";
 
 export const Header: FC = () => {
-  const { name, avatar } = useAuth();
+  const { name, avatar, id } = useAuth();
   return (
     <header>
       <div className='logo'>
@@ -16,7 +16,7 @@ export const Header: FC = () => {
           <li>
             <Link to='/create-post'>Создать пост</Link>
             {name ? (
-              <Link to='/profile'>
+              <Link to={`/user/${id}`}>
                 {name}
                 <img src={avatar} alt='' />
               </Link>

@@ -1,0 +1,15 @@
+.user_info {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 8px 8px 0 8px;
+  margin-bottom: 4px;
+  background: var(--post-color);
+  min-height: 110px;
+
+  img {
+    float: left;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    margin-right: 10px;
+  }
+}

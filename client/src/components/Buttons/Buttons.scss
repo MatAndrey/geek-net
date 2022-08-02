@@ -52,3 +52,21 @@
     cursor: default;
   }
 }
+
+.red_button {
+  width: 120px;
+  background-color: var(--warning-color);
+  border: 1px solid var(--font-thirdly-color);
+  padding: 2px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(253, 36, 36, 0.8);
+  }
+  &:disabled {
+    background-color: var(--light-gray);
+    cursor: default;
+  }
+}

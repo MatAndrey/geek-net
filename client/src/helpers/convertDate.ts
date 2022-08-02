@@ -1,7 +1,5 @@
-const monthDict = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-
 export function convertDatestringToDate(string: string): string {
-  const date = new Date(string);
-  let result = `${date.getDate()} ${monthDict[date.getMonth()]} ${date.getFullYear()}`;
+  const format = new Intl.DateTimeFormat("ru", { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format;
+  const result = format(new Date(string));
   return result;
 }
