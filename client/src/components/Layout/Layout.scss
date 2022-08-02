@@ -18,7 +18,7 @@ header {
       }
     }
   }
-  nav {
+  nav.inline {
     height: 100%;
     ul {
       list-style: none;
@@ -43,6 +43,63 @@ header {
           }
         }
       }
+    }
+  }
+
+  nav.fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.6);
+    ul {
+      width: 200px;
+      margin: 10% auto;
+      height: 80%;
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      li {
+        a {
+          font-size: 18px;
+          display: inline-block;
+          color: white;
+          padding: 11px;
+          text-decoration: none;
+          display: flex;
+          justify-content: center;
+          img {
+            height: 18px;
+            width: 18px;
+            border-radius: 10px;
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+  }
+
+  .menu_button {
+    border: none;
+    background: inherit;
+    z-index: 100;
+    background: transparent;
+  }
+
+  @media screen and (min-width: 360px) {
+    .menu_button {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    nav.inline {
+      visibility: hidden;
+    }
+    .menu_button {
+      display: block;
     }
   }
 }

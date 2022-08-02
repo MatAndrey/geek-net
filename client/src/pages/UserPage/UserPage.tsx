@@ -13,7 +13,7 @@ export const UserPage: FC = () => {
   const { userId = 0 } = useParams();
   const { data: userInfo, isLoading } = userApi.useGetUserByIdQuery(+userId);
   const { data: posts } = postsApi.useGetPostByUserIdQuery(+userId);
-  const { logout } = useAuth();
+  const { logout, id } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -31,7 +31,7 @@ export const UserPage: FC = () => {
         <img src={userInfo.avatar} alt='' />
         <h2>{userInfo.name}</h2>
         <p>Зарегистрирован: {convertDatestringToDate(userInfo.registratedat)}</p>
-        <RedButton onClick={handleLogout}>Выйти</RedButton>
+        {id === userId && <RedButton onClick={handleLogout}>Выйти</RedButton>}
       </div>
       <div className='user_posts'>
         <h2>Посты пользователя:</h2>

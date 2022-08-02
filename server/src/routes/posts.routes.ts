@@ -86,10 +86,10 @@ router.get("/:id", async (req: Req, res: any) => {
         where users.id = posts.authorid),
         (select count(*) as likes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'LIKE' and posts.id = post_likes.postid),
+        where type = 'LIKE' and posts.id = post_likes.postid),
         (select count(*) as dislikes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'DISLIKE' and posts.id = post_likes.postid),
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
         (select count(*) as comments
         from comments
         where posts.id = comments.pageid)
@@ -121,10 +121,10 @@ router.get("/", async (req: Req, res: any) => {
         where users.id = posts.authorid),
         (select count(*) as likes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'LIKE' and posts.id = post_likes.postid),
+        where type = 'LIKE' and posts.id = post_likes.postid),
         (select count(*) as dislikes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'DISLIKE' and posts.id = post_likes.postid),
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
         (select count(*) as comments
         from comments
         where posts.id = comments.pageid)
@@ -155,10 +155,10 @@ router.get("/user/:id", async (req: Req, res: any) => {
         where users.id = posts.authorid),
         (select count(*) as likes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'LIKE' and posts.id = post_likes.postid),
+        where type = 'LIKE' and posts.id = post_likes.postid),
         (select count(*) as dislikes
         from post_likes
-        where post_likes.authorid = posts.authorid and type = 'DISLIKE' and posts.id = post_likes.postid),
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
         (select count(*) as comments
         from comments
         where posts.id = comments.pageid)
