@@ -5,7 +5,7 @@ import useAuth from "../../hooks/auth.hook";
 
 export const Header: FC = () => {
   const { name, avatar, id } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <header>
       <div className='logo'>
