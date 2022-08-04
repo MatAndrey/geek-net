@@ -12,8 +12,9 @@ interface CommentData {
 export const postsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IPost[], string>({
-      query: () => ({
+      query: (order) => ({
         url: "/posts",
+        params: { order },
       }),
       providesTags: ["Post"],
     }),

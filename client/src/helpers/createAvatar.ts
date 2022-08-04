@@ -39,6 +39,24 @@ const figures = [
     ctx.lineTo(50, 20);
     ctx.fill();
   },
+
+  function drawStar(ctx: CanvasRenderingContext2D, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(50, 10);
+    ctx.lineTo(73.511, 82.361);
+    ctx.lineTo(11.958, 37.639);
+    ctx.lineTo(88.042, 37.639);
+    ctx.lineTo(26.489, 82.361);
+    ctx.lineTo(50, 10);
+    ctx.fill();
+  },
+
+  function drawCross(ctx: CanvasRenderingContext2D, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(40, 20, 20, 60);
+    ctx.fillRect(20, 40, 60, 20);
+  },
 ];
 
 export function createAvatar(): string {

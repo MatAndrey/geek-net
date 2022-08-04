@@ -110,6 +110,18 @@ router.get("/:id", async (req: Req, res: any) => {
 
 // /api/posts/
 router.get("/", async (req: Req, res: any) => {
+  type Order = "new" | "rated";
+  let order = req.query.order as Order;
+
+  if (!["new", "rated"].includes(order)) {
+    order = "new";
+  }
+
+  const orderToCol = {
+    new: "createdat DESC",
+    rated: "likes DESC",
+  };
+
   try {
     const query = `
       select *,
@@ -129,6 +141,7 @@ router.get("/", async (req: Req, res: any) => {
         from comments
         where posts.id = comments.pageid)
       from posts
+      order by ${orderToCol[order]}
     `;
     const posts = await client.query(query);
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
