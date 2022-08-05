@@ -9,7 +9,7 @@ const router = Router();
 router.post("/create", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { title, body } = req.body;
     const { id } = req.user;
@@ -27,16 +27,16 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
   }
 });
 
-// /api/posts/update body{body, title, id}
+// /api/posts/update body{body, id}
 router.put("/update", authMiddleware, async (req: Req, res: any) => {
   try {
-    if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+    if (!["ADMIN"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
-    const { title, body, id: postId } = req.body;
+    const { body, id: postId } = req.body;
     const { id } = req.user;
 
-    if (id && title) {
+    if (id) {
       const query = `UPDATE posts SET body=$SecretTag$${body}$SecretTag$ WHERE id=${postId}`;
       await client.query(query);
       res.status(200).json({ message: "Пост успешно обновлён" });
@@ -52,8 +52,8 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
 // /api/posts/delete body{id}
 router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
   try {
-    if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+    if (!["ADMIN"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { id } = req.body;
 

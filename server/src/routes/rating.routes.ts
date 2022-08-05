@@ -9,7 +9,7 @@ const router = Router();
 router.post("/posts", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { type, postid } = req.body;
     const { id } = req.user;
@@ -37,7 +37,7 @@ router.post("/posts", authMiddleware, async (req: Req, res: any) => {
 router.post("/comments", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { type, commentid } = req.body;
     const { id } = req.user;

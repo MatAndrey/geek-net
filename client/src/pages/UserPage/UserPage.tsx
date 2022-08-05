@@ -31,7 +31,7 @@ export const UserPage: FC = () => {
         <img src={userInfo.avatar} alt='' />
         <h2>{userInfo.name}</h2>
         <p>Зарегистрирован: {convertDatestringToDate(userInfo.registratedat)}</p>
-        {id === userId && <RedButton onClick={handleLogout}>Выйти</RedButton>}
+        {+id === +userId && <RedButton onClick={handleLogout}>Выйти</RedButton>}
       </div>
       <div className='user_posts'>
         <h2>Посты пользователя:</h2>

@@ -10,7 +10,7 @@ const router = Router();
 router.post("/create", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { answeron, body, pageid } = req.body;
     const { id } = req.user;
@@ -32,7 +32,7 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
 router.put("/update", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { body, id: commentId } = req.body;
     const { id } = req.user;
@@ -54,7 +54,7 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
 router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
-      res.status(403).json({ message: "Доступ запрещён" });
+      return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { id } = req.body;
 

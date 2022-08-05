@@ -5,13 +5,13 @@ import useAuth from "./hooks/auth.hook";
 import ScrollToTop from "./hooks/scrollToTop.hook";
 
 function App() {
-  const { token } = useAuth();
+  const { token, role } = useAuth();
   const isAuth = !!token;
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Layout>
-        <AppRoutes isAuth={isAuth} />
+        <AppRoutes isAuth={isAuth} role={role} />
       </Layout>
     </BrowserRouter>
   );
