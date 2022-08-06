@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { RedButton } from "../../components/Buttons/RedButton";
 import { Loader } from "../../components/Loader/Loader";
 import { Post } from "../../components/Post/Post";
@@ -24,7 +25,10 @@ export const UserPage: FC = () => {
   return isLoading ? (
     <Loader />
   ) : !userInfo ? (
-    <h2>Пользователь не найден</h2>
+    <>
+      <h2>Пользователь не найден</h2>
+      {id && <PrimaryButton onClick={logout}>Выйти</PrimaryButton>}
+    </>
   ) : (
     <>
       <div className='user_info'>

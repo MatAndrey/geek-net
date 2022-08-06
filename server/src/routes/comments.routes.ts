@@ -87,10 +87,10 @@ router.get("/:pageId", async (req: Req, res: any) => {
           where users.id = comments.authorid),
           (select count(*) as likes
           from comment_likes
-          where comment_likes.authorid = comments.authorid and type = 'LIKE' and comments.id = comment_likes.commentid),
+          where type = 'LIKE' and comments.id = comment_likes.commentid),
           (select count(*) as dislikes
           from comment_likes
-          where comment_likes.authorid = comments.authorid and type = 'DISLIKE' and comments.id = comment_likes.commentid)
+          where type = 'DISLIKE' and comments.id = comment_likes.commentid)
         from comments
         where comments.pageid = ${pageId}
       `;

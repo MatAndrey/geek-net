@@ -97,6 +97,9 @@ router.get("/:id", async (req: Req, res: any) => {
       where posts.id = ${id}
     `;
       const post = await client.query(query);
+      if (!post.rows.length) {
+        return res.status(404).json({ message: "Пост не существует" });
+      }
       const resp = { ...post.rows[0], likes: post.rows[0].likes - post.rows[0].dislikes };
       res.json(resp);
     } else {
