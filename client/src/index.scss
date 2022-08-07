@@ -129,24 +129,42 @@ body,
 * {
   font-family: "Roboto", "Arial", sans-serif;
   font-size: 16px;
+  color: var(--font-primary-color);
+  transition: background-color, color 0.3s;
 }
 
 a {
   color: var(--link-color);
 }
 
-:root {
-  --font-primary-color: #000000;
-  --font-secondary-color: #333;
-  --font-thirdly-color: #666;
-  --bg-color: #e5eff7;
-  --header-color: #73bcf7;
+html[data-theme="light"] {
+  --font-primary-color: rgb(0, 0, 0);
+  --font-secondary-color: rgb(51, 51, 51);
+  --font-thirdly-color: rgb(102, 102, 102);
+  --bg-color: rgb(229, 239, 247);
+  --header-color: rgb(115, 188, 247);
   --footer-color: rgb(68, 68, 68);
-  --post-color: #fafdff;
-  --link-color: #69acf8;
+  --post-color: rgb(250, 253, 255);
+  --link-color: rgb(105, 172, 248);
   --light-blue: rgba(84, 182, 238, 0.8);
   --blue: rgba(49, 169, 238, 0.8);
   --warning-color: rgba(253, 36, 36, 0.7);
   --light-gray: rgb(156, 156, 156);
-  --border-color: #dadee1;
+  --border-color: rgb(218, 222, 225);
+}
+
+html[data-theme="dark"] {
+  --font-primary-color: rgb(255, 255, 255);
+  --font-secondary-color: rgb(212, 212, 212);
+  --font-thirdly-color: rgb(150, 150, 150);
+  --bg-color: rgb(28, 28, 29);
+  --header-color: rgb(47, 58, 67);
+  --footer-color: rgb(46, 46, 46);
+  --post-color: #333536;
+  --link-color: #69acf8;
+  --light-blue: rgba(84, 182, 238, 0.8);
+  --blue: rgba(49, 169, 238, 0.8);
+  --warning-color: rgba(182, 73, 73, 0.7);
+  --light-gray: rgb(156, 156, 156);
+  --border-color: rgb(69, 70, 70);
 }

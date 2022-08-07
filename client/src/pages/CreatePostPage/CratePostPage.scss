@@ -13,11 +13,21 @@
       border: none;
       border-bottom: 2px solid var(--font-secondary-color);
       overflow: scroll;
+      background: inherit;
     }
-    .ck-content {
-      border: 1px solid var(--font-secondary-color);
-      padding: 4px;
+
+    .ck {
+      background: inherit;
+      .ck-content {
+        border: 1px solid var(--font-secondary-color);
+        padding: 4px;
+        background: inherit;
+      }
+      svg {
+        color: var(--font-primary-color);
+      }
     }
+
     .button_wrapper {
       width: 50%;
       display: inline-block;

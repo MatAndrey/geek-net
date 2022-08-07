@@ -46,20 +46,20 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
       <div className='post_footer'>
         <div className='likes'>
           <button className='rating_button icon' onClick={handleLike}>
-            <FiArrowUp size='24px' color='rgba(0, 100, 0, 0.7)' />
+            <FiArrowUp size='24px' stroke='rgba(0, 100, 0, 0.5)' />
           </button>
           <div className='likes_count icon'>{post.likes}</div>
           <button className='rating_button icon' onClick={handleDislike}>
-            <FiArrowDown size='24px' color='rgba(100, 0, 0, 0.7)' />
+            <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.7)' />
           </button>
         </div>
         <HashLink to={`/posts/${post.id}#comments`} className={"comments icon"}>
-          <FiMessageSquare size='22px' color='rgba(0, 0, 0, 0.7)' />
+          <FiMessageSquare size='22px' />
           {post.comments}
         </HashLink>
 
         <button className='save_button icon'>
-          <FiBookmark size='22px' color='rgba(0, 0, 0, 0.7)' /> Сохранить {/* TODO сохранение */}
+          <FiBookmark size='22px' /> Сохранить {/* TODO сохранение */}
         </button>
       </div>
     </article>

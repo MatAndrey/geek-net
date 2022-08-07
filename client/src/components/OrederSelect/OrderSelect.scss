@@ -5,8 +5,14 @@
     margin-bottom: 4px;
     border-radius: 4px;
     border-color: var(--border-color);
+    background: inherit;
+    option {
+      background: var(--bg-color);
+    }
+
     &:focus {
-      outline: 3px auto var(--blue);
+      outline: none;
+      border: var(--blue) solid 1px;
     }
   }
 }

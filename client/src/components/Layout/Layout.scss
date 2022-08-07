@@ -24,8 +24,11 @@ header {
       list-style: none;
       margin: 0;
       padding: 0;
+      height: 100%;
       li {
         float: left;
+        height: 100%;
+        vertical-align: middle;
         a {
           font-size: 18px;
           display: inline-block;
@@ -88,18 +91,28 @@ header {
     background: transparent;
   }
 
-  @media screen and (min-width: 360px) {
+  @media screen and (min-width: 400px) {
     .menu_button {
       display: none;
     }
   }
 
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 400px) {
     nav.inline {
       visibility: hidden;
     }
     .menu_button {
       display: block;
+    }
+  }
+
+  .theme_switch {
+    height: 100%;
+    button {
+      height: 100%;
+      border: none;
+      background: inherit;
+      cursor: pointer;
     }
   }
 }
