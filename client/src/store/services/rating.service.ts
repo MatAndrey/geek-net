@@ -34,5 +34,13 @@ export const ratingApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Comment"],
     }),
+    savePost: builder.mutation<void, number>({
+      query: (postid) => ({
+        url: "/rating/save-post",
+        method: "POST",
+        body: { postid },
+      }),
+      invalidatesTags: ["SavedPost"],
+    }),
   }),
 });

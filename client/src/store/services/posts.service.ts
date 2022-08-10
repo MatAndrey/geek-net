@@ -18,6 +18,13 @@ export const postsApi = api.injectEndpoints({
       }),
       providesTags: ["Post"],
     }),
+    getSavedPosts: builder.query<IPost[], string>({
+      query: (order) => ({
+        url: "/posts/saved",
+        params: { order },
+      }),
+      providesTags: ["SavedPost"],
+    }),
     getPostById: builder.query<IPost, number>({
       query: (id) => ({
         url: "/posts/" + id,
@@ -29,6 +36,12 @@ export const postsApi = api.injectEndpoints({
         url: "/posts/user/" + id,
       }),
       providesTags: ["Post"],
+    }),
+    searchPosts: builder.query<IPost[], string>({
+      query: (string) => ({
+        url: "/posts/search",
+        params: { search: string },
+      }),
     }),
     getCommentsByPostId: builder.query<IComment[], number>({
       query: (postId) => ({

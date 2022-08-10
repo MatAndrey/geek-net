@@ -70,6 +70,97 @@ router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
   }
 });
 
+// /api/posts/saved
+router.get("/saved", authMiddleware, async (req: Req, res: any) => {
+  if (!["ADMIN", "USER"].includes(req.user.role)) {
+    return res.status(403).json({ message: "Доступ запрещён" });
+  }
+  const { id } = req.user;
+
+  type Order = "new" | "rated";
+  let order = req.query.order as Order;
+
+  if (!["new", "rated"].includes(order)) {
+    order = "new";
+  }
+
+  const orderToCol = {
+    new: "createdat DESC",
+    rated: "likes DESC",
+  };
+
+  try {
+    const query = `
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where id in 
+      (
+        select postid as id from saved_posts 
+        where userid = ${id}
+      )
+      order by ${orderToCol[order]}
+    `;
+    const posts = await client.query(query);
+    const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
+    res.json(resp);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Ошибка при получении постов" });
+  }
+});
+
+// /api/posts/search
+router.get("/search", async (req: Req, res: any) => {
+  const { search = "" } = req.query;
+
+  try {
+    const query = `
+    select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where id in (
+        select id from posts
+        where to_tsvector(title) || to_tsvector(body) @@ to_tsquery($dsf$${search.toString().replace(/ +/g, " ").trim().replace(" ", " | ")}$dsf$)
+      )
+    `;
+    const posts = await client.query(query);
+    const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
+    res.json(resp);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Ошибка при получении постов" });
+  }
+});
+
 // /api/posts/:id
 router.get("/:id", async (req: Req, res: any) => {
   try {

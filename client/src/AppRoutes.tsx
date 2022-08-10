@@ -8,6 +8,8 @@ import { SignUpPage } from "./pages/LoginPages/SignUpPage";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 import { PostPage } from "./pages/PostPage/PostPage";
 import { PostsPage } from "./pages/PostsPage/PostsPage";
+import { SavedPostsPage } from "./pages/PostsPage/SavedPostsPage";
+import { SearchResultsPage } from "./pages/SearchResultsPage/SearchResults";
 import { UserPage } from "./pages/UserPage/UserPage";
 
 interface PrpoType {
@@ -20,6 +22,8 @@ export const AppRoutes: FC<PrpoType> = ({ isAuth, role }) => {
     <Routes>
       <Route path='/' element={<PostsPage />} />
       <Route path='/posts' element={<PostsPage />} />
+      <Route path='/saved-posts' element={<SavedPostsPage />} />
+      <Route path='/search-results' element={<SearchResultsPage />} />
       <Route path='/posts/:postId' element={<PostPage />} />
       <Route path='/user/:userId' element={<UserPage />} />
       <Route path='/create-post' element={isAuth ? <CreatePostPage /> : <Navigate to='/login' />} />

@@ -17,6 +17,7 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
   const reactBody = parse(post.body);
   const [dislikeMutation] = ratingApi.usePostDislikeMutation();
   const [likeMutation] = ratingApi.usePostLikeMutation();
+  const [savePost] = ratingApi.useSavePostMutation();
 
   const handleLike = () => {
     likeMutation(post.id);
@@ -40,7 +41,7 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
           <Link to={`/posts/${post.id}`} className='post_link'>
             <h3>{post.title}</h3>
           </Link>
-          {reactBody}
+          <div className='text'>{reactBody}</div>
         </div>
       </div>
       <div className='post_footer'>
@@ -50,7 +51,7 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
           </button>
           <div className='likes_count icon'>{post.likes}</div>
           <button className='rating_button icon' onClick={handleDislike}>
-            <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.7)' />
+            <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.5)' />
           </button>
         </div>
         <HashLink to={`/posts/${post.id}#comments`} className={"comments icon"}>
@@ -58,8 +59,8 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
           {post.comments}
         </HashLink>
 
-        <button className='save_button icon'>
-          <FiBookmark size='22px' /> Сохранить {/* TODO сохранение */}
+        <button className='save_button icon' onClick={() => savePost(post.id)}>
+          <FiBookmark size='22px' />
         </button>
       </div>
     </article>

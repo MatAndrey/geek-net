@@ -60,4 +60,31 @@ router.post("/comments", authMiddleware, async (req: Req, res: any) => {
   }
 });
 
+// /api/rating/save-post body{postid}
+router.post("/save-post", authMiddleware, async (req: Req, res: any) => {
+  try {
+    if (!["USER", "ADMIN"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Доступ запрещён" });
+    }
+    const { postid } = req.body;
+    const { id } = req.user;
+
+    if (id && postid) {
+      const delQuery = `delete from saved_posts where userid=${id} and postid =${postid}`;
+      const resp = await client.query(delQuery);
+
+      if (resp.rowCount === 0) {
+        const query = `INSERT INTO saved_posts(userid, postid) values ('${id}', ${postid})`;
+        await client.query(query);
+      }
+      res.status(200).json({ message: "Пост успешно сохранён" });
+    } else {
+      res.status(500).json({ message: "Ошибка при сохранении поста" });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Ошибка при сохранении поста" });
+  }
+});
+
 module.exports = router;

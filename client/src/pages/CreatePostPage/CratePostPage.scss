@@ -2,6 +2,7 @@
   .post_wrapper {
     background: var(--post-color);
     padding: 6px;
+    border-radius: 12px;
     h2 {
       padding: 4px 0;
       font-size: 18px;
@@ -17,15 +18,7 @@
     }
 
     .ck {
-      background: inherit;
-      .ck-content {
-        border: 1px solid var(--font-secondary-color);
-        padding: 4px;
-        background: inherit;
-      }
-      svg {
-        color: var(--font-primary-color);
-      }
+      z-index: 10;
     }
 
     .button_wrapper {

@@ -92,11 +92,12 @@
   }
 }
 
-.overflow_hidden p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 16;
-  line-clamp: 16;
-  -webkit-box-orient: vertical;
+.overflow_hidden {
+  .text {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
+  }
 }

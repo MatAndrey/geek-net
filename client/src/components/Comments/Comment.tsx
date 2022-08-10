@@ -67,11 +67,11 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
         <div className='comment_footer'>
           <div className='likes'>
             <button className='rating_button icon' onClick={handleLike}>
-              <FiArrowUp size='24px' color='rgba(0, 100, 0, 0.7)' />
+              <FiArrowUp size='24px' stroke='rgba(0, 100, 0, 0.5)' />
             </button>
             <div className='likes_count icon'>{comment.likes}</div>
             <button className='rating_button icon' onClick={handleDislike}>
-              <FiArrowDown size='24px' color='rgba(100, 0, 0, 0.7)' />
+              <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.5)' />
             </button>
             {isAuth ? !isOpen && <button onClick={() => setIsOpen(true)}>ответить</button> : <Link to='/login'>ответить</Link>}
           </div>

@@ -15,6 +15,6 @@ const baseQuery = fetchBaseQuery({
 export const api = createApi({
   reducerPath: "splitApi",
   baseQuery: baseQuery,
-  tagTypes: ["Comment", "Post"],
+  tagTypes: ["Comment", "Post", "SavedPost"],
   endpoints: () => ({}),
 });
