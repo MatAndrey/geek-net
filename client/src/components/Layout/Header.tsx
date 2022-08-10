@@ -37,7 +37,7 @@ export const Header: FC = () => {
             <div className='search_bar'>
               <div className='search'>
                 <form onSubmit={handleSearch}>
-                  <input type='text' onChange={(e) => setSearch(e.target.value)} value={search} onSubmit={handleSearch} />
+                  <input type='text' onChange={(e) => setSearch(e.target.value)} value={search} onSubmit={handleSearch} placeholder='Поиск' />
                   <button onClick={handleSearch}>
                     <GoSearch />
                   </button>
