@@ -74,7 +74,7 @@ router.post("/save-post", authMiddleware, async (req: Req, res: any) => {
       const resp = await client.query(delQuery);
 
       if (resp.rowCount === 0) {
-        const query = `INSERT INTO saved_posts(userid, postid) values ('${id}', ${postid})`;
+        const query = `INSERT INTO saved_posts(userid, postid) values (${id}, ${postid})`;
         await client.query(query);
       }
       res.status(200).json({ message: "Пост успешно сохранён" });

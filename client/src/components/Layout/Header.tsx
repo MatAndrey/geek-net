@@ -21,6 +21,7 @@ export const Header: FC = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     navigate("/search-results", { state: search });
+    setSearch("");
     setIsMenuOpen(false);
   };
 
