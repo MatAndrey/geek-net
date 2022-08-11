@@ -58,8 +58,8 @@ header {
     z-index: 99;
     background: rgba(0, 0, 0, 0.6);
     ul {
-      width: 500px;
-      margin: 10% auto;
+      width: 100%px;
+      margin: 20% auto;
       height: 80%;
       list-style: none;
       padding: 0;
@@ -95,11 +95,14 @@ header {
     .menu_button {
       display: none;
     }
+    nav.inline {
+      display: block;
+    }
   }
 
   @media screen and (max-width: 785px) {
     nav.inline {
-      visibility: hidden;
+      display: none;
     }
     .menu_button {
       display: block;
