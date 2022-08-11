@@ -131,6 +131,9 @@ header {
     justify-content: center;
     align-items: center;
     .search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       input {
         background: inherit;
         border: none;
@@ -139,6 +142,9 @@ header {
         &:focus {
           outline: none;
           border: none;
+        }
+        @media screen and (max-width: 250px) {
+          width: 70%;
         }
       }
       button {
