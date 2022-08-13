@@ -9,21 +9,41 @@ interface CommentData {
   answeron: number | null;
 }
 
+interface PostsQuery {
+  order: string;
+  page: number;
+  userid?: number;
+  search?: string;
+}
+
 export const postsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPosts: builder.query<IPost[], string>({
-      query: (order) => ({
+    getAllPosts: builder.query<IPost[], PostsQuery>({
+      query: ({ order, page }) => ({
         url: "/posts",
-        params: { order },
+        params: { order, page },
       }),
       providesTags: ["Post"],
     }),
-    getSavedPosts: builder.query<IPost[], string>({
-      query: (order) => ({
+    getSavedPosts: builder.query<IPost[], PostsQuery>({
+      query: ({ order, page }) => ({
         url: "/posts/saved",
-        params: { order },
+        params: { order, page },
       }),
       providesTags: ["SavedPost"],
+    }),
+    getPostByUserId: builder.query<IPost[], PostsQuery>({
+      query: ({ userid, order, page }) => ({
+        url: "/posts/user/" + userid,
+        params: { order, page },
+      }),
+      providesTags: ["Post"],
+    }),
+    searchPosts: builder.query<IPost[], PostsQuery>({
+      query: ({ order, page, search }) => ({
+        url: "/posts/search",
+        params: { search, order, page },
+      }),
     }),
     getPostById: builder.query<IPost, number>({
       query: (id) => ({
@@ -31,18 +51,7 @@ export const postsApi = api.injectEndpoints({
       }),
       providesTags: ["Post"],
     }),
-    getPostByUserId: builder.query<IPost[], number>({
-      query: (id) => ({
-        url: "/posts/user/" + id,
-      }),
-      providesTags: ["Post"],
-    }),
-    searchPosts: builder.query<IPost[], string>({
-      query: (string) => ({
-        url: "/posts/search",
-        params: { search: string },
-      }),
-    }),
+
     getCommentsByPostId: builder.query<IComment[], number>({
       query: (postId) => ({
         url: "/comments/" + postId,

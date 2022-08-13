@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { QueryResult, QueryResultRow } from "pg";
 import client from "../database/connect";
 import authMiddleware from "../middleware/auth.middleware";
 import { Req } from "../types/express.types";
@@ -15,7 +16,7 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && title) {
-      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now(), ${id}, $SecretTag$${title}$SecretTag$, $SecretTag$${body}$SecretTag$) RETURNING id`;
+      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now() at time zone 'utc', ${id}, $SecretTag$${title}$SecretTag$, $SecretTag$${body}$SecretTag$) RETURNING id`;
       const response = await client.query(query);
       res.status(200).json({ message: "Пост успешно опубликован", id: response.rows[0].id });
     } else {
@@ -77,45 +78,20 @@ router.get("/saved", authMiddleware, async (req: Req, res: any) => {
   }
   const { id } = req.user;
 
-  type Order = "new" | "rated";
-  let order = req.query.order as Order;
-
-  if (!["new", "rated"].includes(order)) {
-    order = "new";
-  }
-
-  const orderToCol = {
-    new: "createdat DESC",
-    rated: "likes DESC",
-  };
+  const order = (req.query.order || "createdat") as string;
+  const page = +(req.query.page ? req.query.page : 1) as number;
 
   try {
-    const query = `
-      select *,
-        (select avatar
-        from users
-        where users.id = posts.authorid),
-        (select name
-        from users
-        where users.id = posts.authorid),
-        (select count(*) as likes
-        from post_likes
-        where type = 'LIKE' and posts.id = post_likes.postid),
-        (select count(*) as dislikes
-        from post_likes
-        where type = 'DISLIKE' and posts.id = post_likes.postid),
-        (select count(*) as comments
-        from comments
-        where posts.id = comments.pageid)
-      from posts
-      where id in 
-      (
-        select postid as id from saved_posts 
-        where userid = ${id}
-      )
-      order by ${orderToCol[order]}
-    `;
-    const posts = await client.query(query);
+    const posts = await getPosts(
+      `
+    where id in
+    (
+      select postid as id from saved_posts 
+      where userid = ${id}
+    )`,
+      order,
+      page
+    );
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
   } catch (e) {
@@ -124,37 +100,48 @@ router.get("/saved", authMiddleware, async (req: Req, res: any) => {
   }
 });
 
-// /api/posts/search
+// /api/posts/search ?search=string
 router.get("/search", async (req: Req, res: any) => {
   const { search = "" } = req.query;
+  const order = (req.query.order || "createdat") as string;
+  const page = +(req.query.page ? req.query.page : 1) as number;
 
   try {
-    const query = `
-    select *,
-        (select avatar
-        from users
-        where users.id = posts.authorid),
-        (select name
-        from users
-        where users.id = posts.authorid),
-        (select count(*) as likes
-        from post_likes
-        where type = 'LIKE' and posts.id = post_likes.postid),
-        (select count(*) as dislikes
-        from post_likes
-        where type = 'DISLIKE' and posts.id = post_likes.postid),
-        (select count(*) as comments
-        from comments
-        where posts.id = comments.pageid)
-      from posts
-      where id in (
-        select id from posts
-        where to_tsvector(title) || to_tsvector(body) @@ to_tsquery($dsf$${search.toString().replace(/ +/g, " ").trim().replace(" ", " | ")}$dsf$)
-      )
-    `;
-    const posts = await client.query(query);
+    const posts = await getPosts(
+      `
+    where id in (
+      select id from posts
+      where to_tsvector(title) || to_tsvector(body) @@ to_tsquery($SecretTag$${search
+        .toString()
+        .replace(/ +/g, " ")
+        .trim()
+        .replace(" ", " | ")}$SecretTag$)
+    )`,
+      order,
+      page
+    );
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Ошибка при получении постов" });
+  }
+});
+
+// /api/posts/user/:id
+router.get("/user/:id", async (req: Req, res: any) => {
+  try {
+    const { id } = req.params;
+    const order = (req.query.order || "createdat") as string;
+    const page = +(req.query.page ? req.query.page : 1) as number;
+
+    if (id) {
+      const posts = await getPosts(`where authorid = ${id}`, order, page);
+      const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
+      res.json(resp);
+    } else {
+      res.status(500).json({ message: "Ошибка при получении постов" });
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Ошибка при получении постов" });
@@ -167,27 +154,7 @@ router.get("/:id", async (req: Req, res: any) => {
     const { id } = req.params;
 
     if (id) {
-      const query = `
-      select *,
-        (select avatar
-        from users
-        where users.id = posts.authorid),
-        (select name
-        from users
-        where users.id = posts.authorid),
-        (select count(*) as likes
-        from post_likes
-        where type = 'LIKE' and posts.id = post_likes.postid),
-        (select count(*) as dislikes
-        from post_likes
-        where type = 'DISLIKE' and posts.id = post_likes.postid),
-        (select count(*) as comments
-        from comments
-        where posts.id = comments.pageid)
-      from posts
-      where posts.id = ${id}
-    `;
-      const post = await client.query(query);
+      const post = await getPosts(`where posts.id = ${id}`);
       if (!post.rows.length) {
         return res.status(404).json({ message: "Пост не существует" });
       }
@@ -204,40 +171,11 @@ router.get("/:id", async (req: Req, res: any) => {
 
 // /api/posts/
 router.get("/", async (req: Req, res: any) => {
-  type Order = "new" | "rated";
-  let order = req.query.order as Order;
-
-  if (!["new", "rated"].includes(order)) {
-    order = "new";
-  }
-
-  const orderToCol = {
-    new: "createdat DESC",
-    rated: "likes DESC",
-  };
+  const order = (req.query.order || "createdat") as string;
+  const page = +(req.query.page ? req.query.page : 1) as number;
 
   try {
-    const query = `
-      select *,
-        (select avatar
-        from users
-        where users.id = posts.authorid),
-        (select name
-        from users
-        where users.id = posts.authorid),
-        (select count(*) as likes
-        from post_likes
-        where type = 'LIKE' and posts.id = post_likes.postid),
-        (select count(*) as dislikes
-        from post_likes
-        where type = 'DISLIKE' and posts.id = post_likes.postid),
-        (select count(*) as comments
-        from comments
-        where posts.id = comments.pageid)
-      from posts
-      order by ${orderToCol[order]}
-    `;
-    const posts = await client.query(query);
+    const posts = await getPosts(``, order, page);
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
   } catch (e) {
@@ -246,42 +184,33 @@ router.get("/", async (req: Req, res: any) => {
   }
 });
 
-// /api/posts/user/:id
-router.get("/user/:id", async (req: Req, res: any) => {
-  try {
-    const { id } = req.params;
+async function getPosts(subquery: string, order?: string, page?: number): Promise<QueryResult<QueryResultRow>> {
+  const orderBy = order ? `order by ${order} DESC` : "";
+  const limit = page ? `limit 10 offset ${10 * (page - 1)}` : `limit 10 offset 0`;
 
-    if (id) {
-      const query = `
-      select *,
-        (select avatar
-        from users
-        where users.id = posts.authorid and users.id = ${id}),
-        (select name
-        from users
-        where users.id = posts.authorid),
-        (select count(*) as likes
-        from post_likes
-        where type = 'LIKE' and posts.id = post_likes.postid),
-        (select count(*) as dislikes
-        from post_likes
-        where type = 'DISLIKE' and posts.id = post_likes.postid),
-        (select count(*) as comments
-        from comments
-        where posts.id = comments.pageid)
-      from posts
-      where authorid = ${id}
-    `;
-      const posts = await client.query(query);
-      const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
-      res.json(resp);
-    } else {
-      res.status(500).json({ message: "Ошибка при получении постов" });
-    }
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Ошибка при получении постов" });
-  }
-});
+  const query = `
+  select *,
+    (select avatar
+    from users
+    where users.id = posts.authorid),
+    (select name
+    from users
+    where users.id = posts.authorid),
+    (select count(*) as likes
+    from post_likes
+    where type = 'LIKE' and posts.id = post_likes.postid),
+    (select count(*) as dislikes
+    from post_likes
+    where type = 'DISLIKE' and posts.id = post_likes.postid),
+    (select count(*) as comments
+    from comments
+    where posts.id = comments.pageid)
+  from posts
+  ${subquery}
+  ${orderBy}
+  ${limit}
+  `;
+  return await client.query(query);
+}
 
 module.exports = router;

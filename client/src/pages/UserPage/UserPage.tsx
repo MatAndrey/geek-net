@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { RedButton } from "../../components/Buttons/RedButton";
 import { Loader } from "../../components/Loader/Loader";
-import { Post } from "../../components/Post/Post";
+import { PostList } from "../../components/PostList/PostList";
 import { convertDatestringToDate } from "../../helpers/convertDate";
 import useAuth from "../../hooks/auth.hook";
 import { postsApi } from "../../store/services/posts.service";
@@ -13,7 +13,6 @@ import "./UserPage.scss";
 export const UserPage: FC = () => {
   const { userId = 0 } = useParams();
   const { data: userInfo, isLoading } = userApi.useGetUserByIdQuery(+userId);
-  const { data: posts } = postsApi.useGetPostByUserIdQuery(+userId);
   const { logout, id } = useAuth();
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ export const UserPage: FC = () => {
       </div>
       <div className='user_posts'>
         <h2>Посты пользователя:</h2>
-        {!posts ? <h2>У пользователя нет постов</h2> : posts.map((post) => <Post post={post} key={post.id} />)}
+        {<PostList postApi={postsApi.useGetPostByUserIdQuery} userid={+userId} />}
       </div>
     </>
   );

@@ -8,9 +8,9 @@ interface PropType {
 export const OrderSelect: FC<PropType> = ({ handleChange }) => {
   return (
     <div className='order_select'>
-      <select name='order' onChange={handleChange} defaultValue={"new"}>
-        <option value='new'>сначала новые</option>
-        <option value='rated'>сначала популярные</option>
+      <select name='order' onChange={handleChange} defaultValue={"createdat"}>
+        <option value='createdat'>сначала новые</option>
+        <option value='likes'>сначала популярные</option>
       </select>
     </div>
   );
