@@ -5,6 +5,7 @@ import useAuth from "../../hooks/auth.hook";
 import { useTheme } from "../../hooks/theme.hook";
 import { BsMoon, BsSun } from "react-icons/bs";
 import { GoSearch } from "react-icons/go";
+import "./Header.scss";
 
 export const Header: FC = () => {
   const { name, avatar, id } = useAuth();

@@ -16,7 +16,7 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && body) {
-      const query = `INSERT INTO comments(createdat, body, authorid, pageid, answeron) values (now(), $SecretTag$${body}$SecretTag$, ${id}, ${pageid}, ${answeron})`;
+      const query = `INSERT INTO comments(createdat, body, authorid, pageid, answeron) values (now() at time zone 'utc', $SecretTag$${body}$SecretTag$, ${id}, ${pageid}, ${answeron})`;
       await client.query(query);
       res.status(200).json({ message: "Комментарий успешно опубликован" });
     } else {

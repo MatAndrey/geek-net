@@ -8,9 +8,6 @@ export function convertDatestringToDate(string: string): string {
     minute: "2-digit",
     timeZone,
   }).format;
-  const date = new Date(string);
-  const result = format(
-    new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
-  );
+  const result = format(new Date(string));
   return result;
 }
