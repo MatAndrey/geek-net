@@ -16,7 +16,7 @@ interface CommentsProps {
 export const CommentsContainer: FC<CommentsProps> = memo(({ postId }) => {
   const { data: comments, isFetching } = postsApi.useGetCommentsByPostIdQuery(+postId);
   const [postCommentMutation] = postsApi.usePostCommentMutation();
-  const { id: userId, token } = useAuth();
+  const { token } = useAuth();
   const isAuth = !!token;
 
   const [comment, setComment] = useState("");
@@ -31,7 +31,6 @@ export const CommentsContainer: FC<CommentsProps> = memo(({ postId }) => {
       postCommentMutation({
         body: comment,
         pageid: postId,
-        authorid: +userId,
         answeron: null,
       });
       setComment("");

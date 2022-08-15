@@ -4,7 +4,6 @@ import { api } from "./api";
 
 interface CommentData {
   body: string;
-  authorid: number;
   pageid: number;
   answeron: number | null;
 }

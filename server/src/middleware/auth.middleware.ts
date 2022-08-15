@@ -9,17 +9,15 @@ export default async (req: any, res: any, next: any) => {
   }
 
   try {
-    let token = req.headers.authentication.split(" ")[1];
-    token = token === "null" ? null : token;
-
-    if (!token) {
+    if (!req.headers.authentication) {
       req.user = {
         role: "GUEST",
       };
-      return next();
-    }
+      next();
+    } else {
+      let token = req.headers.authentication.split(" ")[1];
+      token = token === "null" ? null : token;
 
-    if (token !== null) {
       const decoded = jwt.verify(token, config.get("jwtSecret"));
       req.user = decoded;
 

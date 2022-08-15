@@ -1,0 +1,53 @@
+.notification_container {
+  position: fixed;
+  padding: 4px;
+  right: 0;
+  width: 300px;
+  box-sizing: border-box;
+  .notification {
+    padding: 4px;
+    margin: 4px 0;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    &.error {
+      border-color: rgb(248, 31, 31);
+      background-color: var(--not-error-background);
+    }
+    &.info {
+      border-color: rgb(111, 236, 53);
+      background-color: var(--not-info-background);
+    }
+    animation: appear 0.1s linear 0s 1 normal none, disapear 0.1s linear 2.2s 1 normal forwards;
+
+    @keyframes appear {
+      0% {
+        right: -110%;
+      }
+      100% {
+        right: 0;
+      }
+    }
+
+    @keyframes disapear {
+      0% {
+        right: 0;
+      }
+      100% {
+        right: -110%;
+      }
+    }
+  }
+  @media screen and (max-width: 1320px) {
+    margin-right: auto;
+    margin-left: auto;
+    right: 0;
+    left: 0;
+  }
+  @media screen and (max-width: 700px) {
+    width: 100%;
+  }
+}

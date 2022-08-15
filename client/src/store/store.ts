@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./reducers/auth.slice";
 import userReducer from "./reducers/user.slice";
 import createPostReducer from "./reducers/createPost.slice";
+import notificationsReducer from "./reducers/notifications.slice";
 import { api } from "./services/api";
 
 const rootReducer = combineReducers({
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
   userReducer,
   authReducer,
   createPostReducer,
+  notificationsReducer,
 });
 
 export function setupStore() {

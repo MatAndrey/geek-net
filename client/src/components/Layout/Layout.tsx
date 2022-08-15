@@ -1,4 +1,5 @@
 import { FC, ReactElement } from "react";
+import { NotificationContainer } from "../Notifications/Notifications";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import "./Layout.scss";
@@ -12,6 +13,7 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
     <>
       <Header />
       <main className='layout'>
+        <NotificationContainer />
         <div className='page_wrapper'>{children}</div>
       </main>
       <Footer />

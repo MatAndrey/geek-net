@@ -9,8 +9,8 @@ import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { SecondaryButton } from "../Buttons/SecondaryButton";
 import { ThirdlyButton } from "../Buttons/ThirdlyButton";
 import { postsApi } from "../../store/services/posts.service";
-import useAuth from "../../hooks/auth.hook";
 import { ratingApi } from "../../store/services/rating.service";
+import useNotification from "../../hooks/notifications.hook";
 
 interface CommentProps {
   comment: IComment;
@@ -22,10 +22,10 @@ interface CommentProps {
 export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, numberInThrad }) => {
   const body = HTMLReactParser(comment.body);
   const [postCommentMutation] = postsApi.usePostCommentMutation();
-  const { id: userId } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [answer, setAnswer] = useState("");
   const [isThread, setIsThread] = useState(true);
+  const { error } = useNotification();
 
   const [likeMutation] = ratingApi.useCommentLikeMutation();
   const [dislikeMutation] = ratingApi.useCommentDislikeMutation();
@@ -36,16 +36,32 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
   };
 
   const handleLike = () => {
-    likeMutation(comment.id);
+    if (!isAuth) {
+      error("Войдите, чтобы ставить лайки");
+    } else {
+      likeMutation(comment.id);
+    }
   };
 
   const handleDislike = () => {
-    dislikeMutation(comment.id);
+    if (!isAuth) {
+      error("Войдите, чтобы ставить дизлайки");
+    } else {
+      dislikeMutation(comment.id);
+    }
+  };
+
+  const handleOpenAnswer = () => {
+    if (!isAuth) {
+      error("Войдите, чтобы оставлять комментарии");
+    } else {
+      setIsOpen(true);
+    }
   };
 
   const handleSubmit = () => {
     if (answer !== "") {
-      postCommentMutation({ body: answer, pageid, authorid: +userId, answeron: comment.id });
+      postCommentMutation({ body: answer, pageid, answeron: comment.id });
       setAnswer("");
     }
   };
@@ -73,7 +89,7 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
             <button className='rating_button icon' onClick={handleDislike}>
               <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.5)' />
             </button>
-            {isAuth ? !isOpen && <button onClick={() => setIsOpen(true)}>ответить</button> : <Link to='/login'>ответить</Link>}
+            <button onClick={handleOpenAnswer}>ответить</button>
           </div>
           {isOpen && (
             <div className='answer'>

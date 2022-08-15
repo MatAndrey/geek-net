@@ -125,6 +125,10 @@ h6 {
 
 // RESET END
 
+body {
+  overflow-x: hidden;
+}
+
 body,
 * {
   font-family: "Roboto", "Arial", sans-serif;
@@ -151,6 +155,8 @@ html[data-theme="light"] {
   --warning-color: rgba(253, 36, 36, 0.7);
   --light-gray: rgb(156, 156, 156);
   --border-color: rgb(218, 222, 225);
+  --not-info-background: rgb(186, 230, 166);
+  --not-error-background: rgb(221, 126, 126);
 }
 
 html[data-theme="dark"] {
@@ -167,6 +173,8 @@ html[data-theme="dark"] {
   --warning-color: rgba(182, 73, 73, 0.7);
   --light-gray: rgb(156, 156, 156);
   --border-color: rgb(69, 70, 70);
+  --not-info-background: rgb(54, 75, 45);
+  --not-error-background: rgb(95, 48, 48);
 
   --ck-border-radius: 4px;
   --ck-font-size-base: 14px;

@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import parse from "html-react-parser";
 import { ratingApi } from "../../store/services/rating.service";
+import useAuth from "../../hooks/auth.hook";
+import useNotification from "../../hooks/notifications.hook";
 
 interface PostProps {
   post: IPost;
@@ -18,13 +20,31 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
   const [dislikeMutation] = ratingApi.usePostDislikeMutation();
   const [likeMutation] = ratingApi.usePostLikeMutation();
   const [savePost] = ratingApi.useSavePostMutation();
+  const { token } = useAuth();
+  const { error } = useNotification();
 
   const handleLike = () => {
-    likeMutation(post.id);
+    if (!token) {
+      error("Войдите, чтобы ставить лайки");
+    } else {
+      likeMutation(post.id);
+    }
   };
 
   const handleDislike = () => {
-    dislikeMutation(post.id);
+    if (!token) {
+      error("Войдите, чтобы ставить дизлайки");
+    } else {
+      dislikeMutation(post.id);
+    }
+  };
+
+  const handleSave = () => {
+    if (!token) {
+      error("Войдите, чтобы сохранять посты");
+    } else {
+      savePost(post.id);
+    }
   };
 
   return (
@@ -59,7 +79,7 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
           {post.comments}
         </HashLink>
 
-        <button className='save_button icon' onClick={() => savePost(post.id)}>
+        <button className='save_button icon' onClick={handleSave}>
           <FiBookmark size='22px' />
         </button>
       </div>
