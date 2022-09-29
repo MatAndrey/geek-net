@@ -18,6 +18,7 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
 
     const hashedPassword = (await client.query(`SELECT password FROM users WHERE id = ${id}`)).rows[0].password;
     const isAuth = await bcrypt.compare(oldPassword, hashedPassword);
+
     if (!isAuth) {
       return res.status(403).json({ message: "Нет авторизации" });
     }

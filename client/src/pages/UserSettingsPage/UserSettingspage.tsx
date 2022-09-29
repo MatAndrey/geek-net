@@ -4,6 +4,7 @@ import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/Buttons/SecondaryButton";
 import { createAvatar } from "../../helpers/createAvatar";
 import useAuth from "../../hooks/auth.hook";
+import useNotification from "../../hooks/notifications.hook";
 import { userApi } from "../../store/services/user.servive";
 import "./UserSettingsPage.scss";
 
@@ -12,6 +13,7 @@ export const UserSettingsPage: FC = () => {
   const navigate = useNavigate();
   const { data } = userApi.useGetUserByIdQuery(+id);
   const [updateMutation] = userApi.useUpdateMutation();
+  const { error } = useNotification();
   const [newData, setNewData] = useState({
     name: "",
     avatar: "",
@@ -36,12 +38,20 @@ export const UserSettingsPage: FC = () => {
 
   const handleSubmit = async () => {
     if (newData.newPassword === newData.doublePassword) {
-      await updateMutation({
-        name: newData.name,
-        password: newData.newPassword,
-        avatar: newData.avatar,
-        oldPassword: newData.oldPassword,
-      });
+      if (!newData.oldPassword) {
+        return error("Введите пароль");
+      }
+      try {
+        await updateMutation({
+          name: newData.name,
+          password: newData.newPassword,
+          avatar: newData.avatar,
+          oldPassword: newData.oldPassword,
+        }).unwrap();
+      } catch (e: any) {
+        error(e.data.message);
+      }
+
       navigate("/login");
     }
   };
