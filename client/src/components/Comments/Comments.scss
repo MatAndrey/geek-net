@@ -36,7 +36,6 @@
 
   .comment {
     position: relative;
-    margin-bottom: 8px;
     .comment_header {
       a.user {
         text-decoration: none;
@@ -66,8 +65,9 @@
 
     .tread_line {
       position: absolute;
-      bottom: 0;
-      height: calc(100% - 25px);
+      bottom: 2px;
+      left: -16px;
+      height: 100%;
       width: 16px;
       i {
         position: absolute;
@@ -79,15 +79,13 @@
     }
 
     .comment_body {
-      margin-left: 16px;
-      padding: 4px 0;
+      padding: 5px;
       p {
         line-height: 1.2;
       }
     }
 
     .comment_footer {
-      margin-left: 16px;
       color: var(--font-secondary-color);
       font-weight: 500;
       font-size: 15px;
@@ -129,10 +127,30 @@
 
     .child_comment {
       margin-left: 16px;
+      &.overflow {
+        margin-left: -64px;
+
+        & > .comment {
+          background: var(--post-color);
+          width: 100%;
+        }
+      }
+    }
+
+    .horizontal_line {
+      height: 2px;
+      i {
+        width: 46px;
+        height: 0px;
+        border: 1px solid var(--font-thirdly-color);
+        position: absolute;
+        left: -56px;
+      }
     }
   }
 
   .no_thread {
+    margin-left: -24px;
     button {
       border: none;
       background: inherit;

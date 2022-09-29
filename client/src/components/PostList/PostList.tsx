@@ -40,7 +40,6 @@ export const PostList: FC<Props> = ({ postApi, search, userid }) => {
     // eslint-disable-next-line
   }, []);
   const scrollHandler = (e) => {
-    console.log(e.target.documentElement.scrollHeight - e.target.documentElement.scrollTop - window.innerHeight < 100, !isLoading, !isEnd);
     if (e.target.documentElement.scrollHeight - e.target.documentElement.scrollTop - window.innerHeight < 100 && !isLoading && !isEnd) {
       setIsLoading(true);
       setCurrentPage(currentPage + 1);
@@ -52,7 +51,7 @@ export const PostList: FC<Props> = ({ postApi, search, userid }) => {
     setCurrentPage(1);
   };
 
-  if (posts?.length === 0) {
+  if (posts?.length === 0 && !isEnd) {
     return isLoading ? <Loader /> : <h2>Постов нет.</h2>;
   }
 

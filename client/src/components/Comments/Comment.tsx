@@ -68,7 +68,13 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
 
   if (isThread) {
     return (
-      <div className='comment'>
+      <div className={"comment"}>
+        {numberInThrad > 0 && numberInThrad % 5 !== 0 && (
+          <div className='tread_line'>
+            <i onClick={() => setIsThread(false)}></i>
+          </div>
+        )}
+
         <div className='comment_header'>
           <Link to={`/user/${comment.authorid}`} className='user'>
             <img src={comment.avatar} alt='' className='avatar' />
@@ -76,9 +82,7 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
             <span className='date'>{convertDatestringToDate(comment.createdat)}</span>
           </Link>
         </div>
-        <div className='tread_line'>
-          <i onClick={() => setIsThread(false)}></i>
-        </div>
+
         <div className='comment_body'>{body}</div>
         <div className='comment_footer'>
           <div className='likes'>
@@ -99,12 +103,16 @@ export const Comment: FC<CommentProps> = memo(({ comment, isAuth, pageid, number
             </div>
           )}
         </div>
-        <div className='child_comment'>
+        <div className={"child_comment" + ((numberInThrad + 1) % 5 === 0 ? " overflow" : "")}>
+          {(numberInThrad + 1) % 5 === 0 && (
+            <div className='horizontal_line'>
+              <i></i>
+            </div>
+          )}
           {comment.comments.map((answer) => (
             <Comment comment={answer} key={answer.id} isAuth={isAuth} pageid={pageid} numberInThrad={numberInThrad + 1} />
           ))}
         </div>
-        {/* TODO ANSWERS GAP */}
       </div>
     );
   } else {

@@ -11,6 +11,7 @@ import { PostsPage } from "./pages/PostsPage/PostsPage";
 import { SavedPostsPage } from "./pages/PostsPage/SavedPostsPage";
 import { SearchResultsPage } from "./pages/SearchResultsPage/SearchResults";
 import { UserPage } from "./pages/UserPage/UserPage";
+import { UserSettingsPage } from "./pages/UserSettingsPage/UserSettingspage";
 
 interface PrpoType {
   isAuth: boolean;
@@ -24,6 +25,7 @@ export const AppRoutes: FC<PrpoType> = ({ isAuth, role }) => {
       <Route path='/posts' element={<PostsPage />} />
       <Route path='/search-results' element={<SearchResultsPage />} />
       <Route path='/posts/:postId' element={<PostPage />} />
+      <Route path='/user/settings' element={isAuth ? <UserSettingsPage /> : <Navigate to='/' />} />
       <Route path='/user/:userId' element={<UserPage />} />
       <Route path='/saved-posts' element={isAuth ? <SavedPostsPage /> : <Navigate to='/login' />} />
       <Route path='/create-post' element={isAuth ? <CreatePostPage /> : <Navigate to='/login' />} />

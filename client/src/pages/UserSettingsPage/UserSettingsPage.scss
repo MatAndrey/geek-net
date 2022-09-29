@@ -1,0 +1,33 @@
+.user_settings {
+  .form_wrapper {
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 8px;
+    background: var(--post-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    form {
+      label {
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          border-radius: 50%;
+          border: 1px solid var(--border-color);
+        }
+        button {
+          width: 150px;
+          margin: 4px;
+        }
+        input {
+          margin: 2px 0;
+          padding: 2px;
+          border-radius: 5px;
+          border: 1px solid var(--border-color);
+          width: 100%;
+        }
+      }
+    }
+  }
+}

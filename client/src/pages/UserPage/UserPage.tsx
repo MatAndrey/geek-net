@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { RedButton } from "../../components/Buttons/RedButton";
@@ -34,7 +35,16 @@ export const UserPage: FC = () => {
         <img src={userInfo.avatar} alt='' />
         <h2>{userInfo.name}</h2>
         <p>Зарегистрирован: {convertDatestringToDate(userInfo.registratedat)}</p>
-        {+id === +userId && <RedButton onClick={handleLogout}>Выйти</RedButton>}
+        {+id === +userId && (
+          <div className='button_wrapper'>
+            <Link to={"/user/settings"}>Редактировать</Link>
+          </div>
+        )}
+        {+id === +userId && (
+          <div className='button_wrapper'>
+            <RedButton onClick={handleLogout}>Выйти</RedButton>
+          </div>
+        )}
       </div>
       <div className='user_posts'>
         <h2>Посты пользователя:</h2>

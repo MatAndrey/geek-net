@@ -51,7 +51,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-hash-link": "^2.4.5"
+    "@types/react-router-hash-link": "^2.4.5",
+    "@types/serviceworker": "^0.0.51"
   },
   "engines": {
     "node": "16.x",
