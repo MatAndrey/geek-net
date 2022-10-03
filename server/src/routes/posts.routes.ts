@@ -31,7 +31,7 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
 // /api/posts/update body{body, id}
 router.put("/update", authMiddleware, async (req: Req, res: any) => {
   try {
-    if (!["ADMIN"].includes(req.user.role)) {
+    if (!(["ADMIN"].includes(req.user.role) || req.user.id === req.body.authorid)) {
       return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { body, id: postId } = req.body;

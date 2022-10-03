@@ -16,6 +16,7 @@ export const PostPage: FC = () => {
   const { role } = useAuth();
   const navigate = useNavigate();
   const [deletePostMutation] = useDeletePostMutation();
+  const { id } = useAuth();
 
   if (postId) {
     var { data: post, isFetching } = postsApi.useGetPostByIdQuery(+postId);
@@ -40,7 +41,7 @@ export const PostPage: FC = () => {
     ) : (
       <div className='post_page'>
         <Post post={post} />
-        {role === "ADMIN" && (
+        {(role === "ADMIN" || post.authorid === +id) && (
           <div className='admin_bar'>
             <div className='button_wrapper'>
               <SecondaryButton onClick={handleEdit}>Редактировать</SecondaryButton>

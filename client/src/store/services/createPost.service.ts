@@ -19,6 +19,7 @@ export const createPostApi = api.injectEndpoints({
         body: {
           body: post.body,
           id: post.id,
+          authorid: post.authorid,
         },
       }),
       invalidatesTags: ["Post"],

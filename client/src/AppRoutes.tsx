@@ -29,7 +29,8 @@ export const AppRoutes: FC<PrpoType> = ({ isAuth, role }) => {
       <Route path='/user/:userId' element={<UserPage />} />
       <Route path='/saved-posts' element={isAuth ? <SavedPostsPage /> : <Navigate to='/login' />} />
       <Route path='/create-post' element={isAuth ? <CreatePostPage /> : <Navigate to='/login' />} />
-      <Route path='/edit-post' element={role === "ADMIN" ? <EditPostPage /> : <Navigate to='/' />} />
+      {/* <Route path='/edit-post' element={role === "ADMIN" ? <EditPostPage /> : <Navigate to='/' />} /> */}
+      <Route path='/edit-post' element={<EditPostPage />} />
       <Route path='/login' element={isAuth ? <Navigate to='/' /> : <LoginPage />} />
       <Route path='/signup' element={isAuth ? <Navigate to='/' /> : <SignUpPage />} />
       <Route path='*' element={<NotFoundPage />} />
