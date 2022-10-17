@@ -1,8 +1,8 @@
 .post_component {
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 8px 8px 0 8px;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   background: var(--post-color);
 
   .post_header {
