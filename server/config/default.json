@@ -1,5 +1,0 @@
-{
-  "port": 5000,
-  "DATABASE_URL": "postgres://peofxnzwjucolx:b77b9b0aa081420a0ef21de4fbcdc87b86315c91ec6d484024b6d6297082ae02@ec2-54-228-201-167.eu-west-1.compute.amazonaws.com:5432/d37lacpa0fisqv",
-  "jwtSecret": "osugf23ifsknfoi"
-}
