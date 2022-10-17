@@ -1,11 +1,10 @@
-import { Router, Response } from "express";
+import { Router } from "express";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
 import client from "../database/connect";
 import { Req } from "../types/express.types";
-
 const router = Router();
 
 // /api/auth/register body{name, password}
@@ -31,8 +30,8 @@ router.post(
       if (candidate.rows.length) {
         return res.status(501).json({ message: "Логин занят" });
       }
-      const addQuery = `INSERT INTO users(name, avatar, registratedat, password, role) VALUES ('${name}', '${avatar}', now(), '${hashedPassword}', 'USER')`;
-      await client.query(addQuery);
+      const addQuery = `INSERT INTO users(name, avatar, registratedat, password, role) VALUES ($1, $2, now(), $3, 'USER')`;
+      await client.query(addQuery, [name, avatar, hashedPassword]);
 
       login(req, res);
     } catch (e) {
@@ -47,8 +46,8 @@ router.post("/login", login);
 
 async function login(req: Req, res: any) {
   try {
-    const query = `SELECT password, id, role, name, avatar FROM users WHERE name = '${req.body.name}'`;
-    const response = await client.query(query);
+    const query = `SELECT password, id, role, name, avatar FROM users WHERE name = $1`;
+    const response = await client.query(query, [req.body.name]);
 
     if (!response.rows.length) {
       return res.status(401).json({ message: "Пользватель не существует" });

@@ -5,22 +5,22 @@ import { Req } from "../types/express.types";
 
 const router = Router();
 
-// /api/rating/posts body{type, postid}
+// /api/rating/posts body{type, postId}
 router.post("/posts", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
       return res.status(403).json({ message: "Доступ запрещён" });
     }
-    const { type, postid } = req.body;
+    const { type, postId } = req.body;
     const { id } = req.user;
 
-    if (id && type && postid) {
-      const delQuery = `delete from post_likes where authorid=${id} and postid =${postid}`;
-      const resp = await client.query(delQuery);
+    if (id && type && postId) {
+      const delQuery = `delete from post_likes where authorid=$1 and postid=$2`;
+      const resp = await client.query(delQuery, [id, postId]);
 
       if (resp.rowCount === 0) {
-        const query = `INSERT INTO post_likes(type, authorid, postid) values ('${type}', ${id}, ${postid})`;
-        await client.query(query);
+        const query = `INSERT INTO post_likes(type, authorid, postid) values ($1, $2, $3)`;
+        await client.query(query, [type, id, postId]);
       }
 
       res.status(200).json({ message: "Рейтинг успешно изменён" });
@@ -43,12 +43,12 @@ router.post("/comments", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && type && commentid) {
-      const delQuery = `delete from comment_likes where authorid=${id} and commentid =${commentid}`;
-      const resp = await client.query(delQuery);
+      const delQuery = `delete from comment_likes where authorid=$1 and commentid=$1`;
+      const resp = await client.query(delQuery, [id, commentid]);
 
       if (resp.rowCount === 0) {
-        const query = `INSERT INTO comment_likes(type, authorid, commentid) values ('${type}', ${id}, ${commentid})`;
-        await client.query(query);
+        const query = `INSERT INTO comment_likes(type, authorid, commentid) values ($1, $2, $3)`;
+        await client.query(query, [type, id, commentid]);
       }
       res.status(200).json({ message: "Рейтинг успешно изменён" });
     } else {
@@ -70,12 +70,12 @@ router.post("/save-post", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && postid) {
-      const delQuery = `delete from saved_posts where userid=${id} and postid =${postid}`;
-      const resp = await client.query(delQuery);
+      const delQuery = `delete from saved_posts where userid=$1 and postid=$2`;
+      const resp = await client.query(delQuery, [id, postid]);
 
       if (resp.rowCount === 0) {
-        const query = `INSERT INTO saved_posts(userid, postid) values (${id}, ${postid})`;
-        await client.query(query);
+        const query = `INSERT INTO saved_posts(userid, postid) values ($1, $2)`;
+        await client.query(query, [id, postid]);
       }
       res.status(200).json({ message: "Пост успешно сохранён" });
     } else {

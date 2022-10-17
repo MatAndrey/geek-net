@@ -19,8 +19,6 @@ CREATE TABLE public.posts (
 		on delete cascade on update cascade
 );
 
-
-
 CREATE TABLE public.comments (
 	id SERIAL primary key,
 	createdat timestamp NOT NULL,

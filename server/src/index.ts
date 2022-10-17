@@ -1,7 +1,6 @@
 const express = require("express");
 import config from "config";
 import path from "path";
-import jsonServer from "json-server";
 
 const app = express();
 
@@ -12,8 +11,6 @@ app.use("/api/posts/", require("./routes/posts.routes"));
 app.use("/api/comments/", require("./routes/comments.routes"));
 app.use("/api/rating/", require("./routes/rating.routes"));
 app.use("/api/users/", require("./routes/users.routes"));
-
-app.use("/api", jsonServer.router(path.join(__dirname, "json-server", "db.json")));
 
 app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
 app.get("*", (req: any, res: any) => {

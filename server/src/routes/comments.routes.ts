@@ -6,18 +6,18 @@ import { Req } from "../types/express.types";
 
 const router = Router();
 
-// /api/comments/create body{body, answeron, pageid}
+// /api/comments/create body{body, answeron, pageId}
 router.post("/create", authMiddleware, async (req: Req, res: any) => {
   try {
     if (!["USER", "ADMIN"].includes(req.user.role)) {
       return res.status(403).json({ message: "Доступ запрещён" });
     }
-    const { answeron, body, pageid } = req.body;
+    const { answeron, body, pageId } = req.body;
     const { id } = req.user;
 
     if (id && body) {
-      const query = `INSERT INTO comments(createdat, body, authorid, pageid, answeron) values (now() at time zone 'utc', $SecretTag$${body}$SecretTag$, ${id}, ${pageid}, ${answeron})`;
-      await client.query(query);
+      const query = `INSERT INTO comments(createdat, body, authorid, pageid, answeron) values (now() at time zone 'utc', $1, $2, $3, $4)`;
+      await client.query(query, [body, id, pageId, answeron]);
       res.status(200).json({ message: "Комментарий успешно опубликован" });
     } else {
       res.status(500).json({ message: "Ошибка при создании комментария" });
@@ -38,8 +38,8 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && body && commentId) {
-      const query = `UPDATE comments SET body=$SecretTag$${body}$SecretTag$ WHERE id=${commentId}`;
-      await client.query(query);
+      const query = `UPDATE comments SET body=$1 WHERE id=$2`;
+      await client.query(query, [body, commentId]);
       res.status(200).json({ message: "Комментарий успешно обновлён" });
     } else {
       res.status(500).json({ message: "Ошибка при обновлении комментарий" });
@@ -59,8 +59,8 @@ router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.body;
 
     if (id) {
-      const query = `DELETE FROM comments WHERE id=${id}`;
-      await client.query(query);
+      const query = `DELETE FROM comments WHERE id=$1`;
+      await client.query(query, [id]);
       res.status(200).json({ message: "Коментарий успешно удалён" });
     } else {
       res.status(500).json({ message: "Ошибка при удалении комментария" });

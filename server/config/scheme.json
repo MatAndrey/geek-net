@@ -1,0 +1,5 @@
+{
+  "port": "number, default port for localhost",
+  "DATABASE_URL": "string, URI to PostgresSQL database",
+  "jwtSecret": "string, secret key for jwt"
+}

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { QueryResult, QueryResultRow } from "pg";
 import client from "../database/connect";
 import authMiddleware from "../middleware/auth.middleware";
 import { Req } from "../types/express.types";
@@ -16,8 +15,8 @@ router.post("/create", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id && title) {
-      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now() at time zone 'utc', ${id}, $SecretTag$${title}$SecretTag$, $SecretTag$${body}$SecretTag$) RETURNING id`;
-      const response = await client.query(query);
+      const query = `INSERT INTO posts(createdat, authorid, title, body) values (now() at time zone 'utc', $1, $2, $3) RETURNING id`;
+      const response = await client.query(query, [id, title, body]);
       res.status(200).json({ message: "Пост успешно опубликован", id: response.rows[0].id });
     } else {
       res.status(500).json({ message: "Ошибка при создании поста" });
@@ -38,8 +37,8 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
     const { id } = req.user;
 
     if (id) {
-      const query = `UPDATE posts SET body=$SecretTag$${body}$SecretTag$ WHERE id=${postId}`;
-      await client.query(query);
+      const query = `UPDATE posts SET body=$1 WHERE id=$2`;
+      await client.query(query, [body, postId]);
       res.status(200).json({ message: "Пост успешно обновлён" });
     } else {
       res.status(500).json({ message: "Ошибка при обновлении поста" });
@@ -53,14 +52,14 @@ router.put("/update", authMiddleware, async (req: Req, res: any) => {
 // /api/posts/delete body{id}
 router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
   try {
-    if (!["ADMIN"].includes(req.user.role)) {
+    if (!["ADMIN"].includes(req.user.role) || req.user.id === req.body.authorid) {
       return res.status(403).json({ message: "Доступ запрещён" });
     }
     const { id } = req.body;
 
     if (id) {
-      const query = `DELETE FROM posts WHERE id=${id}`;
-      await client.query(query);
+      const query = `DELETE FROM posts WHERE id=$1`;
+      await client.query(query, id);
       res.status(200).json({ message: "Пост успешно удалён" });
     } else {
       res.status(500).json({ message: "Ошибка при удалении поста" });
@@ -78,19 +77,39 @@ router.get("/saved", authMiddleware, async (req: Req, res: any) => {
   }
   const { id } = req.user;
 
-  const order = (req.query.order || "createdat") as string;
+  const reqOrder = `${req.query.order}`;
+  const order = ["createdat", "likes"].includes(reqOrder) ? reqOrder : "createdat";
   const page = +(req.query.page ? req.query.page : 1) as number;
 
   try {
-    const posts = await getPosts(
+    const posts = await client.query(
       `
-    where id in
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where id in
     (
       select postid as id from saved_posts 
-      where userid = ${id}
-    )`,
-      order,
-      page
+      where userid = $1
+    )
+      order by ${order} DESC
+      limit 10 offset $2
+    `,
+      [id, (page - 1) * 10]
     );
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
@@ -103,23 +122,41 @@ router.get("/saved", authMiddleware, async (req: Req, res: any) => {
 // /api/posts/search ?search=string
 router.get("/search", async (req: Req, res: any) => {
   const { search = "" } = req.query;
-  const order = (req.query.order || "createdat") as string;
+  const reqOrder = `${req.query.order}`;
+  const order = ["createdat", "likes"].includes(reqOrder) ? reqOrder : "createdat";
   const page = +(req.query.page ? req.query.page : 1) as number;
+  const searchString = search.toString().replace(/ +/g, " ").trim().replace(" ", " | ");
 
   try {
-    const posts = await getPosts(
+    const posts = await client.query(
       `
-    where id in (
-      select id from posts
-      where to_tsvector(title) || to_tsvector(body) @@ to_tsquery($SecretTag$${search
-        .toString()
-        .replace(/ +/g, " ")
-        .trim()
-        .replace(" ", " | ")}$SecretTag$)
-    )`,
-      order,
-      page
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where id in (
+        select id from posts
+        where to_tsvector(title) || to_tsvector(body) @@ to_tsquery($1)
+      )
+      order by ${order} DESC
+      limit 10 offset $2
+    `,
+      [searchString, (page - 1) * 10]
     );
+
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
   } catch (e) {
@@ -132,11 +169,36 @@ router.get("/search", async (req: Req, res: any) => {
 router.get("/user/:id", async (req: Req, res: any) => {
   try {
     const { id } = req.params;
-    const order = (req.query.order || "createdat") as string;
+    const reqOrder = `${req.query.order}`;
+    const order = ["createdat", "likes"].includes(reqOrder) ? reqOrder : "createdat";
     const page = +(req.query.page ? req.query.page : 1) as number;
 
     if (id) {
-      const posts = await getPosts(`where authorid = ${id}`, order, page);
+      const posts = await client.query(
+        `
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where authorid = $1
+      order by ${order} DESC
+      limit 10 offset $2
+    `,
+        [id, (page - 1) * 10]
+      );
       const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
       res.json(resp);
     } else {
@@ -154,7 +216,29 @@ router.get("/:id", async (req: Req, res: any) => {
     const { id } = req.params;
 
     if (id) {
-      const post = await getPosts(`where posts.id = ${id}`);
+      const post = await client.query(
+        `
+      select *,
+        (select avatar
+        from users
+        where users.id = posts.authorid),
+        (select name
+        from users
+        where users.id = posts.authorid),
+        (select count(*) as likes
+        from post_likes
+        where type = 'LIKE' and posts.id = post_likes.postid),
+        (select count(*) as dislikes
+        from post_likes
+        where type = 'DISLIKE' and posts.id = post_likes.postid),
+        (select count(*) as comments
+        from comments
+        where posts.id = comments.pageid)
+      from posts
+      where posts.id = $1
+    `,
+        [id]
+      );
       if (!post.rows.length) {
         return res.status(404).json({ message: "Пост не существует" });
       }
@@ -171,11 +255,35 @@ router.get("/:id", async (req: Req, res: any) => {
 
 // /api/posts/
 router.get("/", async (req: Req, res: any) => {
-  const order = (req.query.order || "createdat") as string;
+  const reqOrder = `${req.query.order}`;
+  const order = ["createdat", "likes"].includes(reqOrder) ? reqOrder : "createdat";
   const page = +(req.query.page ? req.query.page : 1) as number;
 
   try {
-    const posts = await getPosts(``, order, page);
+    const posts = await client.query(
+      `
+        select *,
+          (select avatar
+          from users
+          where users.id = posts.authorid),
+          (select name
+          from users
+          where users.id = posts.authorid),
+          (select count(*) as likes
+          from post_likes
+          where type = 'LIKE' and posts.id = post_likes.postid),
+          (select count(*) as dislikes
+          from post_likes
+          where type = 'DISLIKE' and posts.id = post_likes.postid),
+          (select count(*) as comments
+          from comments
+          where posts.id = comments.pageid)
+        from posts
+        order by ${order} DESC
+        limit 10 offset $1
+    `,
+      [(page - 1) * 10]
+    );
     const resp = posts.rows.map((row) => ({ ...row, likes: row.likes - row.dislikes }));
     res.json(resp);
   } catch (e) {
@@ -183,34 +291,5 @@ router.get("/", async (req: Req, res: any) => {
     res.status(500).json({ message: "Ошибка при получении постов" });
   }
 });
-
-async function getPosts(subquery: string, order?: string, page?: number): Promise<QueryResult<QueryResultRow>> {
-  const orderBy = order ? `order by ${order} DESC` : "";
-  const limit = page ? `limit 10 offset ${10 * (page - 1)}` : `limit 10 offset 0`;
-
-  const query = `
-  select *,
-    (select avatar
-    from users
-    where users.id = posts.authorid),
-    (select name
-    from users
-    where users.id = posts.authorid),
-    (select count(*) as likes
-    from post_likes
-    where type = 'LIKE' and posts.id = post_likes.postid),
-    (select count(*) as dislikes
-    from post_likes
-    where type = 'DISLIKE' and posts.id = post_likes.postid),
-    (select count(*) as comments
-    from comments
-    where posts.id = comments.pageid)
-  from posts
-  ${subquery}
-  ${orderBy}
-  ${limit}
-  `;
-  return await client.query(query);
-}
 
 module.exports = router;
