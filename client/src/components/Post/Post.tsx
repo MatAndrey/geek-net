@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { convertDatestringToDate } from "../../helpers/convertDate";
 import IPost from "../../models/IPost";
-import { FiArrowDown, FiArrowUp, FiBookmark, FiMessageSquare } from "react-icons/fi";
+import { FiArrowDown, FiArrowUp, FiBookmark, FiExternalLink, FiMessageSquare } from "react-icons/fi";
 import "./Post.scss";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
@@ -21,7 +21,7 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
   const [likeMutation] = ratingApi.usePostLikeMutation();
   const [savePost] = ratingApi.useSavePostMutation();
   const { token } = useAuth();
-  const { error } = useNotification();
+  const { error, info } = useNotification();
 
   const handleLike = () => {
     if (!token) {
@@ -47,10 +47,16 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
     }
   };
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.origin + "/posts/" + post.id).then(() => {
+      info("Ссылка скопирована в буфер обмена");
+    });
+  };
+
   return (
     <article className={"post_component " + className}>
       <div className='post_header'>
-        <Link to={`/user/${post.authorid}`} className='user'>
+        <Link to={`/user/${post.authorid}`} className='user' data-tooltip={post.name}>
           <img src={post.avatar} alt='' className='avatar' />
           <span className='nickname'>{post.name}</span>
           <span className='date'>{convertDatestringToDate(post.createdat)}</span>
@@ -66,21 +72,25 @@ export const Post: FC<PostProps> = ({ post, className = "" }) => {
       </div>
       <div className='post_footer'>
         <div className='likes'>
-          <button className='rating_button icon' onClick={handleLike}>
+          <button className='rating_button icon' onClick={handleLike} data-tooltip='Лайк'>
             <FiArrowUp size='24px' stroke='rgba(0, 100, 0, 0.5)' />
           </button>
           <div className='likes_count icon'>{post.likes}</div>
-          <button className='rating_button icon' onClick={handleDislike}>
+          <button className='rating_button icon' onClick={handleDislike} data-tooltip='Дизлайк'>
             <FiArrowDown size='24px' stroke='rgba(100, 0, 0, 0.5)' />
           </button>
         </div>
-        <HashLink to={`/posts/${post.id}#comments`} className={"comments icon"}>
+        <HashLink to={`/posts/${post.id}#comments`} className='comments icon' data-tooltip='Комментарии'>
           <FiMessageSquare size='22px' />
           {post.comments}
         </HashLink>
 
-        <button className='save_button icon' onClick={handleSave}>
+        <button className='icon' onClick={handleSave} data-tooltip='Сохранить'>
           <FiBookmark size='22px' />
+        </button>
+
+        <button className='icon' data-tooltip='Поделиться' onClick={copyLink}>
+          <FiExternalLink size='22px' />
         </button>
       </div>
     </article>

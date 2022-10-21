@@ -141,6 +141,28 @@ a {
   color: var(--link-color);
 }
 
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: var(--post-color);
+  padding: 6px;
+  border: 1px solid var(--bg-color);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
+  opacity: 0;
+  margin-bottom: -80px;
+  transition: 0.4s 0s;
+  color: var(--font-primary-color);
+}
+
+[data-tooltip]:hover::after {
+  top: auto;
+  left: auto;
+  opacity: 1;
+  transition: 0.4s 1s;
+}
+
 html[data-theme="light"] {
   --font-primary-color: rgb(0, 0, 0);
   --font-secondary-color: rgb(51, 51, 51);

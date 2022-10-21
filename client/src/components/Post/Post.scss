@@ -59,6 +59,7 @@
     .icon {
       display: flex;
       align-items: center;
+      margin: 0 4px;
     }
 
     button {
@@ -67,6 +68,7 @@
       padding: 0;
       color: var(--font-secondary-color);
       cursor: pointer;
+      font-weight: inherit;
     }
 
     .likes {
@@ -79,15 +81,6 @@
     a.comments {
       text-decoration: none;
       color: var(--font-secondary-color);
-      display: flex;
-      align-items: center;
-      margin-left: 8px;
-    }
-
-    button.save_button {
-      margin-left: 8px;
-      font-weight: 500;
-      font-size: 15px;
     }
   }
 }
