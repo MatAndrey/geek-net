@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { convertTimestampToShortDate } from "../../helpers/convertDate";
 import useAuth from "../../hooks/auth.hook";
+import useNotification from "../../hooks/notifications.hook";
 import "./Chat.scss";
 
 interface ChatMessage {
@@ -13,10 +14,15 @@ interface ChatMessage {
   createdAt: number;
 }
 
-export const Chat = ({ ws }) => {
+type ChatProps = {
+  ws: WebSocket;
+};
+
+export const Chat: FC<ChatProps> = ({ ws }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const { token } = useAuth();
   const [inputMessage, setInputMessage] = useState("");
+  const { info } = useNotification();
 
   ws.onmessage = (message) => {
     setMessages((messages) => [JSON.parse(message.data), ...messages]);
@@ -24,13 +30,17 @@ export const Chat = ({ ws }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const message = {
-      type: "message",
-      data: inputMessage,
-      token,
-    };
-    ws.send(JSON.stringify(message));
-    setInputMessage("");
+    if (inputMessage !== "") {
+      const message = {
+        type: "message",
+        data: inputMessage,
+        token,
+      };
+      ws.send(JSON.stringify(message));
+      setInputMessage("");
+    } else {
+      info("Сообщение не может быть пустым");
+    }
   };
 
   const handleInput = (e) => {
@@ -58,10 +68,16 @@ export const Chat = ({ ws }) => {
         ))}
         <h6>Добро пожаловать в чат</h6>
       </div>
-      <form className='form' onSubmit={handleSubmit}>
-        <input type='text' value={inputMessage} onChange={handleInput} placeholder='Сообщение...' />
-        <input type='submit' value='Отправить' className='button' />
-      </form>
+      {token !== "" ? (
+        <form className='form' onSubmit={handleSubmit}>
+          <input type='text' value={inputMessage} onChange={handleInput} placeholder='Сообщение...' />
+          <input type='submit' value='Отправить' className='button' />
+        </form>
+      ) : (
+        <h6>
+          <Link to={"/login"}>Войдите</Link>, чтобы писать в чат
+        </h6>
+      )}
     </div>
   );
 };

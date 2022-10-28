@@ -1,9 +1,9 @@
 import ws from "ws";
-import jwt, { VerifyOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import config from "config";
 import client from "../database/connect";
 
-export const wsServer = new ws.Server({ noServer: true });
+export const wsServer = new ws.Server({ noServer: true, path: "/ws/chat" });
 
 interface ChatUser {
   connection: ws.WebSocket;
