@@ -58,9 +58,9 @@ async function login(req: Req, res: any) {
     const isAuth = await bcrypt.compare(req.body.password, hashedPassword);
     let token;
     if (req.body.remember === true) {
-      token = jwt.sign({ id }, config.get("jwtSecret"));
+      token = jwt.sign({ id, role }, config.get("jwtSecret"));
     } else {
-      token = jwt.sign({ id }, config.get("jwtSecret"), { expiresIn: "2h" });
+      token = jwt.sign({ id, role }, config.get("jwtSecret"), { expiresIn: "2h" });
     }
 
     if (isAuth) {

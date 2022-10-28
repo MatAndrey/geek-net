@@ -59,7 +59,7 @@ router.delete("/delete", authMiddleware, async (req: Req, res: any) => {
 
     if (id) {
       const query = `DELETE FROM posts WHERE id=$1`;
-      await client.query(query, id);
+      await client.query(query, [id]);
       res.status(200).json({ message: "Пост успешно удалён" });
     } else {
       res.status(500).json({ message: "Ошибка при удалении поста" });

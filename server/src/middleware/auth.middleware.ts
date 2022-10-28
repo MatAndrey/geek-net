@@ -20,14 +20,6 @@ export default async (req: any, res: any, next: any) => {
 
       const decoded = jwt.verify(token, config.get("jwtSecret"));
       req.user = decoded;
-
-      const query = `
-      SELECT role
-      FROM users
-      WHERE id ='${decoded.id}'
-      `;
-      const role = (await client.query(query)).rows[0].role;
-      req.user.role = role;
       next();
     }
   } catch (e) {

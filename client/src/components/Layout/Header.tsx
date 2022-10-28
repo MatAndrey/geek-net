@@ -53,6 +53,11 @@ export const Header: FC = () => {
             </div>
           </li>
           <li>
+            <Link to='/chat' onClick={() => setIsMenuOpen(false)}>
+              Чат
+            </Link>
+          </li>
+          <li>
             <Link to='/create-post' onClick={() => setIsMenuOpen(false)}>
               Создать пост
             </Link>

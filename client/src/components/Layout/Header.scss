@@ -91,7 +91,7 @@ header {
     background: transparent;
   }
 
-  @media screen and (min-width: 785px) {
+  @media screen and (min-width: 835px) {
     .menu_button {
       display: none;
     }
@@ -100,7 +100,7 @@ header {
     }
   }
 
-  @media screen and (max-width: 785px) {
+  @media screen and (max-width: 835px) {
     nav.inline {
       display: none;
     }

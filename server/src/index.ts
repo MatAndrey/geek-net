@@ -1,6 +1,7 @@
 const express = require("express");
 import config from "config";
 import path from "path";
+import { upgrageServer } from "./routes/chat.ws";
 
 const app = express();
 
@@ -21,7 +22,8 @@ const PORT = process.env.PORT || config.get("port") || 5000;
 
 async function start() {
   try {
-    app.listen(PORT, () => console.log("Server was started on " + PORT));
+    const server = app.listen(PORT, () => console.log("Server was started on " + PORT));
+    server.on("upgrade", upgrageServer);
   } catch (e) {
     console.log(e);
     process.exit(1);
