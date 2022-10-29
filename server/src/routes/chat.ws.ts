@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import config from "config";
 import client from "../database/connect";
 
+const JWT_SECRET = process.env.JWT_SECRET || config.get("jwtSecret");
 export const wsServer = new ws.Server({ noServer: true, path: "/ws/chat" });
 
 interface ChatUser {
@@ -32,8 +33,8 @@ wsServer.on("connection", async (socket) => {
   socket.on("message", async (messageBuffer) => {
     const message: WSMessage = JSON.parse(messageBuffer.toString());
 
-    if (message.type === "message" && message.token !== "") {
-      jwt.verify(message.token, config.get("jwtSecret"), async (err, decoded) => {
+    if (message.type === "message" && message.token !== "" && JWT_SECRET) {
+      jwt.verify(message.token, JWT_SECRET, async (err, decoded) => {
         if (err) {
           return socket.close();
         }
