@@ -7,6 +7,8 @@ import client from "../database/connect";
 import { Req } from "../types/express.types";
 const router = Router();
 
+const JWT_SECRET = process.env.JWT_SECRET || config.get("jwtSecret");
+
 // /api/auth/register body{name, password}
 router.post(
   "/signup",
@@ -53,14 +55,19 @@ async function login(req: Req, res: any) {
       return res.status(401).json({ message: "Пользватель не существует" });
     }
 
+    if (!JWT_SECRET) {
+      console.log("JWT_SECRET Does not exist");
+      return res.status(500).json({ message: "Ошибка при входе" });
+    }
+
     const { password: hashedPassword, id, role, name, avatar } = response.rows[0];
 
     const isAuth = await bcrypt.compare(req.body.password, hashedPassword);
     let token;
     if (req.body.remember === true) {
-      token = jwt.sign({ id, role }, config.get("jwtSecret"));
+      token = jwt.sign({ id, role }, JWT_SECRET);
     } else {
-      token = jwt.sign({ id, role }, config.get("jwtSecret"), { expiresIn: "2h" });
+      token = jwt.sign({ id, role }, JWT_SECRET, { expiresIn: "2h" });
     }
 
     if (isAuth) {
